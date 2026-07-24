@@ -24,9 +24,10 @@
     font-family:'Inter', -apple-system, sans-serif;
     overflow-x:hidden;
     height:100%;
+    -webkit-text-size-adjust:100%;
   }
 
-  /* ---------- background: user's bg.jpg + animated topo overlay ---------- */
+  /* ---------- background ---------- */
   .bg-wrap{
     position:fixed; inset:0; z-index:0;
     overflow:hidden;
@@ -45,16 +46,18 @@
     position:absolute; inset:0;
     background: rgba(7,7,20,0.72);
     backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
   }
   .bg-wrap .bg-vignette{
     position:absolute; inset:0;
     background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(7,7,20,0.9) 100%);
   }
 
-  /* Animated topographical overlay */
+  /* topo overlay */
   .topo-layer{
     position:absolute; inset:0;
     opacity:0.35;
+    pointer-events:none;
   }
   .topo-layer svg{
     position:absolute;
@@ -81,28 +84,29 @@
 
   /* ---------- layout ---------- */
   .page{ position:relative; z-index:1; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; }
-  header{ text-align:center; padding: max(40px, env(safe-area-inset-top) + 24px) 20px 6px; }
+  header{ text-align:center; padding: max(36px, env(safe-area-inset-top) + 20px) 20px 6px; }
 
-  /* Profile avatar */
+  /* Avatar */
   .avatar-wrap{
     position:relative;
-    width:72px; height:72px;
-    margin:0 auto 14px;
+    width:68px; height:68px;
+    margin:0 auto 12px;
     border-radius:50%;
-    padding:3px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+    padding:2.5px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05));
   }
   .avatar-wrap img{
     width:100%; height:100%;
     border-radius:50%;
     object-fit:cover;
+    object-position:center;
     display:block;
     background:#111;
   }
 
-  header h1{ margin:0; font-family:'Fraunces',serif; font-weight:600; font-size:clamp(26px,7vw,38px); letter-spacing:-0.01em; }
+  header h1{ margin:0; font-family:'Fraunces',serif; font-weight:600; font-size:clamp(24px,6.5vw,36px); letter-spacing:-0.01em; }
   header p{ margin:6px 0 0; font-size:12px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; }
-  .hint{ text-align:center; font-size:11.5px; color:var(--muted); margin: 6px 0 0; letter-spacing:0.02em; }
+  .hint{ text-align:center; font-size:11px; color:var(--muted); margin: 6px 0 0; letter-spacing:0.02em; }
 
   /* ---------- 3D carousel ---------- */
   .carousel-wrap{
@@ -115,23 +119,24 @@
     -webkit-overflow-scrolling:touch;
     perspective:1400px;
     scrollbar-width:none;
+    touch-action:pan-x;
   }
   .carousel-wrap::-webkit-scrollbar{ display:none; }
   .carousel-track{
     display:flex;
     align-items:flex-end;
-    gap: 38px;
-    padding: 40px calc(50% - 72px) 60px;
+    gap: 32px;
+    padding: 36px calc(50% - 64px) 50px;
   }
 
   .book-card{
     flex-shrink:0;
-    width:144px;
+    width:128px;
     scroll-snap-align:center;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:14px;
+    gap:12px;
     text-decoration:none;
     color:var(--text);
     cursor:pointer;
@@ -154,8 +159,8 @@
   /* 3D book */
   .book-3d{
     position:relative;
-    width:144px;
-    height:196px;
+    width:128px;
+    height:174px;
     transform-style:preserve-3d;
     transform: rotateX(8deg);
     transition: transform 0.4s cubic-bezier(.2,.9,.25,1);
@@ -164,7 +169,7 @@
     transform: rotateX(4deg) translateZ(30px) translateY(-8px);
   }
 
-  /* Spine (front face) */
+  /* Spine */
   .book-spine{
     position:absolute;
     inset:0;
@@ -173,8 +178,8 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:10px;
-    padding: 16px 10px;
+    gap:8px;
+    padding: 14px 8px;
     transform: translateZ(10px);
     box-shadow:
       0 20px 40px rgba(0,0,0,0.55),
@@ -207,25 +212,27 @@
     left:130%;
   }
 
-  .spine-icon{ font-size:28px; position:relative; z-index:1; }
+  .spine-icon{ font-size:26px; position:relative; z-index:1; }
   .spine-icon-img{
-    width:44px; height:44px;
+    width:40px; height:40px;
     object-fit:contain;
+    object-position:center;
     position:relative;
     z-index:1;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    display:block;
   }
   .spine-title{
     font-family:'Fraunces',serif;
     font-weight:600;
-    font-size:14px;
+    font-size:13px;
     letter-spacing:0.02em;
     position:relative;
     z-index:1;
     text-align:center;
   }
 
-  /* Book colors */
+  /* Colors */
   .book-spine.janus{
     background: linear-gradient(160deg, #f0ede5 0%, #e0dbd0 50%, #d4cfc2 100%);
     color: #1a1a1a;
@@ -249,13 +256,13 @@
     border: 1px solid rgba(216,180,102,0.18);
   }
 
-  /* Pages on the right */
+  /* Pages right */
   .book-pages-right{
     position:absolute;
-    right: -9px;
+    right: -8px;
     top: 2px;
     bottom: 2px;
-    width: 12px;
+    width: 10px;
     background: repeating-linear-gradient(
       180deg,
       rgba(235,230,215,0.9) 0px,
@@ -274,13 +281,13 @@
     background: rgba(0,0,0,0.25);
   }
 
-  /* Pages on top */
+  /* Pages top */
   .book-pages-top{
     position:absolute;
-    top: -7px;
+    top: -6px;
     left: 3px;
     right: 3px;
-    height: 8px;
+    height: 7px;
     background: repeating-linear-gradient(
       90deg,
       rgba(235,230,215,0.85) 0px,
@@ -296,10 +303,10 @@
   /* Shadow */
   .book-shadow{
     position:absolute;
-    bottom: -18px;
+    bottom: -16px;
     left: 8%;
     right: 8%;
-    height: 14px;
+    height: 12px;
     background: rgba(0,0,0,0.45);
     border-radius: 50%;
     filter: blur(10px);
@@ -307,7 +314,7 @@
     transition: all 0.4s ease;
   }
   .book-card:hover .book-shadow, .book-card.active .book-shadow{
-    bottom: -24px;
+    bottom: -22px;
     left: 2%;
     right: 2%;
     background: rgba(0,0,0,0.6);
@@ -315,11 +322,11 @@
   }
 
   /* Label */
-  .label{ text-align:center; transition: opacity 0.2s linear, transform 0.3s ease; }
-  .label .t{ font-size:14px; font-weight:600; display:block; }
-  .label .s{ font-size:11px; color:var(--muted); display:block; margin-top:3px; }
+  .label{ text-align:center; transition: opacity 0.2s linear; }
+  .label .t{ font-size:13px; font-weight:600; display:block; }
+  .label .s{ font-size:10.5px; color:var(--muted); display:block; margin-top:2px; }
 
-  /* ---------- open book modal ---------- */
+  /* ---------- modal ---------- */
   .backdrop{
     position:fixed; inset:0; background:rgba(2,2,8,0.78);
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -354,7 +361,7 @@
   .page-inner{
     position:absolute; inset:0;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding: 44px 32px;
+    padding: 40px 28px;
     text-align:center;
     opacity:0;
     transform: rotateY(0deg);
@@ -364,10 +371,35 @@
   .open-book.opened .page-inner{ opacity:1; }
   .page-inner.turning{ transform: rotateY(-92deg); opacity:0.2; }
 
-  .page-inner i.quill{ color:#d8b466; font-size:18px; opacity:0.85; margin-bottom:20px; }
-  .quote-text{ font-family:'Fraunces',serif; font-style:italic; font-size:20px; line-height:1.6; color:var(--text); }
-  .quote-by{ margin-top:18px; font-size:12px; letter-spacing:0.04em; color:var(--muted); text-transform:uppercase; }
-  .quote-tap{ margin-top:28px; font-size:10.5px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase; display:flex; align-items:center; gap:6px; }
+  .page-inner i.quill{ color:#d8b466; font-size:17px; opacity:0.85; margin-bottom:18px; }
+  .quote-text{ font-family:'Fraunces',serif; font-style:italic; font-size:18px; line-height:1.6; color:var(--text); }
+  .quote-by{ margin-top:16px; font-size:11px; letter-spacing:0.04em; color:var(--muted); text-transform:uppercase; }
+  .quote-tap{ margin-top:24px; font-size:10px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase; display:flex; align-items:center; gap:6px; }
+
+  /* ---------- responsive ---------- */
+  @media (min-width: 400px){
+    .book-card{ width:138px; gap:14px; }
+    .book-3d{ width:138px; height:188px; }
+    .book-spine{ gap:10px; padding: 16px 10px; }
+    .spine-icon{ font-size:28px; }
+    .spine-icon-img{ width:44px; height:44px; }
+    .spine-title{ font-size:14px; }
+    .book-pages-right{ width:12px; right:-9px; }
+    .book-pages-top{ height:8px; top:-7px; }
+    .book-shadow{ bottom:-18px; height:14px; }
+    .carousel-track{ gap:38px; padding: 40px calc(50% - 69px) 55px; }
+    .avatar-wrap{ width:72px; height:72px; }
+    .label .t{ font-size:14px; }
+    .label .s{ font-size:11px; }
+    .quote-text{ font-size:20px; }
+    .page-inner{ padding:44px 32px; }
+  }
+
+  @media (min-width: 768px){
+    .book-card{ width:150px; }
+    .book-3d{ width:150px; height:204px; }
+    .carousel-track{ gap:44px; padding: 50px calc(50% - 75px) 70px; }
+  }
 
   @media (prefers-reduced-motion: reduce){
     *{ transition:none !important; animation:none !important; }
@@ -381,12 +413,10 @@
 </head>
 <body>
 
-<!-- Background: user's bg.jpg + dark overlay + animated topo + vignette -->
 <div class="bg-wrap">
   <div class="bg-img"></div>
   <div class="bg-overlay"></div>
 
-  <!-- Animated topographical overlay -->
   <div class="topo-layer">
     <svg class="t1" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
       <path d="M-50,150 Q200,80 400,180 T800,120 T1250,200" stroke="rgba(80,90,160,0.3)" stroke-width="1.2" fill="none"/>
@@ -430,7 +460,6 @@
       <rect x="820" y="340" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.09)" stroke-width="0.5" fill="none"/>
     </svg>
 
-    <!-- City lights -->
     <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
       <circle cx="310" cy="210" r="2" fill="#d4a843" class="pulse-dot"/>
       <circle cx="660" cy="320" r="2" fill="#d4a843" class="pulse-dot d2"/>
@@ -560,7 +589,6 @@
 
 <script>
 (function(){
-  // ---------- 3D coverflow carousel ----------
   var carousel = document.getElementById('carousel');
   var cards = Array.prototype.slice.call(document.querySelectorAll('.book-card'));
   var ticking = false;
@@ -597,7 +625,7 @@
   window.addEventListener('resize', updateCoverflow);
   updateCoverflow();
 
-  // ---------- app-first redirect for link books ----------
+  // app-first redirect
   var isAndroid = /android/i.test(navigator.userAgent);
   var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
@@ -628,7 +656,7 @@
     });
   });
 
-  // ---------- quote book: open / turn page / close ----------
+  // quotes
   var quotes = [
     { q:"You have power over your mind, not outside events.", by:"Marcus Aurelius" },
     { q:"Waste no more time arguing what a good man should be. Be one.", by:"Marcus Aurelius" },
@@ -678,8 +706,8 @@
   function openTheBook(){
     var startRect = quoteBook.querySelector('.book-3d').getBoundingClientRect();
     var vw = window.innerWidth, vh = window.innerHeight;
-    var targetW = Math.min(360, vw*0.9);
-    var targetH = Math.min(480, vh*0.75);
+    var targetW = Math.min(340, vw*0.88);
+    var targetH = Math.min(460, vh*0.72);
     var targetLeft = (vw - targetW)/2;
     var targetTop = (vh - targetH)/2;
 
