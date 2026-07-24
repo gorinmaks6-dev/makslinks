@@ -8,48 +8,62 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="icon" href="assets/janus-logo-icon.png" type="image/png">
 <style>
   :root{
-    --text:#f2f1ee;
-    --muted: rgba(242,241,238,0.6);
-    --card: rgba(255,255,255,0.07);
-    --card-border: rgba(255,255,255,0.14);
+    --text:#e8e6e1;
+    --muted: rgba(232,230,225,0.55);
+    --card: rgba(255,255,255,0.06);
+    --card-border: rgba(255,255,255,0.12);
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
   html,body{
     margin:0; padding:0;
-    background:#05050a;
+    background:#070714;
     color: var(--text);
     font-family:'Inter', -apple-system, sans-serif;
     overflow-x:hidden;
+    height:100%;
   }
 
-  /* ---------- space background ---------- */
-  .space{ position:fixed; inset:0; z-index:0; overflow:hidden;
-    background:
-      radial-gradient(ellipse at 20% 10%, rgba(90,60,160,0.35), transparent 55%),
-      radial-gradient(ellipse at 85% 25%, rgba(30,90,160,0.28), transparent 50%),
-      radial-gradient(ellipse at 50% 90%, rgba(120,40,110,0.22), transparent 55%),
-      #05050a;
+  /* ---------- animated topographical city map background ---------- */
+  .city-map{
+    position:fixed; inset:0; z-index:0;
+    background: #070714;
+    overflow:hidden;
   }
-  .nebula{ position:absolute; width:60vw; height:60vw; border-radius:50%; filter:blur(70px); opacity:0.5; animation:drift 26s ease-in-out infinite; }
-  .nebula.n1{ background:#3a2a7a; top:-10%; left:-15%; }
-  .nebula.n2{ background:#1f4d73; bottom:-15%; right:-10%; animation-delay:-9s; }
-  @keyframes drift{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(4%,3%) scale(1.06);} }
-  .stars{ position:absolute; inset:0; }
-  .star{ position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; animation:twinkle 3.5s ease-in-out infinite; }
-  @keyframes twinkle{ 0%,100%{ opacity:0.15;} 50%{ opacity:1;} }
+  .city-map svg{
+    position:absolute;
+    width:120%; height:120%;
+    left:-10%; top:-10%;
+  }
+  .city-map .layer-1{ animation: driftMap 60s linear infinite; }
+  .city-map .layer-2{ animation: driftMap 45s linear infinite reverse; opacity:0.6; }
+  .city-map .layer-3{ animation: driftMap 35s linear infinite; opacity:0.4; }
+  .city-map .layer-4{ animation: driftMap 80s linear infinite reverse; opacity:0.25; }
+  @keyframes driftMap{
+    0%{ transform: translate(0,0); }
+    50%{ transform: translate(4%,3%); }
+    100%{ transform: translate(0,0); }
+  }
+  .city-map .pulse-dot{
+    animation: pulseLight 4s ease-in-out infinite;
+  }
+  .city-map .pulse-dot.d2{ animation-delay:-1.3s; }
+  .city-map .pulse-dot.d3{ animation-delay:-2.6s; }
+  @keyframes pulseLight{
+    0%,100%{ opacity:0.15; r:1.5; }
+    50%{ opacity:0.9; r:3; }
+  }
 
   /* ---------- layout ---------- */
   .page{ position:relative; z-index:1; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; }
-  header{ text-align:center; padding: max(48px, env(safe-area-inset-top) + 30px) 20px 6px; }
-  header h1{ margin:0; font-family:'Fraunces',serif; font-weight:600; font-size:clamp(26px,7vw,36px); letter-spacing:-0.01em; }
+  header{ text-align:center; padding: max(44px, env(safe-area-inset-top) + 28px) 20px 8px; }
+  header h1{ margin:0; font-family:'Fraunces',serif; font-weight:600; font-size:clamp(28px,7vw,40px); letter-spacing:-0.01em; }
   header p{ margin:8px 0 0; font-size:13px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; }
-  .hint{ text-align:center; font-size:11.5px; color:var(--muted); margin: 6px 0 0; letter-spacing:0.02em; }
+  .hint{ text-align:center; font-size:12px; color:var(--muted); margin: 8px 0 0; letter-spacing:0.02em; }
 
-  /* ---------- coverflow shelf ---------- */
-  .shelf{
+  /* ---------- 3D carousel ---------- */
+  .carousel-wrap{
     flex:1;
     display:flex;
     align-items:center;
@@ -57,56 +71,213 @@
     overflow-y:visible;
     scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;
-    perspective:1100px;
-    margin-top: 6vh;
+    perspective:1400px;
     scrollbar-width:none;
   }
-  .shelf::-webkit-scrollbar{ display:none; }
-  .shelf-track{
+  .carousel-wrap::-webkit-scrollbar{ display:none; }
+  .carousel-track{
     display:flex;
     align-items:flex-end;
-    gap: 30px;
-    padding: 30px calc(50% - 65px) 44px;
+    gap: 36px;
+    padding: 40px calc(50% - 70px) 60px;
   }
-  .cover-card{
+
+  .book-card{
     flex-shrink:0;
-    width:130px;
+    width:140px;
     scroll-snap-align:center;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:12px;
+    gap:14px;
     text-decoration:none;
     color:var(--text);
     cursor:pointer;
     transform-style:preserve-3d;
     will-change: transform;
     transition: transform 0.05s linear;
+    opacity:0;
+    animation: cardEnter 0.7s cubic-bezier(.2,.9,.25,1) forwards;
   }
-  .cover{
-    width:130px;
-    height:172px;
-    border-radius:10px;
-    position:relative;
-    overflow:hidden;
-    box-shadow: 0 18px 34px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.35);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .cover .pages{ position:absolute; top:0; right:0; bottom:0; width:12px;
-    background: repeating-linear-gradient(180deg, rgba(255,255,255,0.55) 0px, rgba(255,255,255,0.55) 1px, rgba(255,255,255,0.15) 1px, rgba(255,255,255,0.15) 3px); }
-  .cover.janus{ background:#eeece4; } .cover.janus img{ width:46%; height:46%; object-fit:contain; }
-  .cover.youtube{ background:linear-gradient(160deg,#ff3b3b,#b30f0f); } .cover.youtube i{ color:#fff; font-size:30px; margin-left:3px; }
-  .cover.tiktok{ background:#0c0c0c; } .cover.tiktok i{ font-size:30px; background:linear-gradient(135deg,#25f4ee,#fe2c55); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .cover.quotes{ background:linear-gradient(160deg,#2a2350,#0f0c22); } .cover.quotes i{ font-size:28px; color:#d8b466; }
+  .book-card:nth-child(1){ animation-delay:0.08s; }
+  .book-card:nth-child(2){ animation-delay:0.16s; }
+  .book-card:nth-child(3){ animation-delay:0.24s; }
+  .book-card:nth-child(4){ animation-delay:0.32s; }
 
-  .label{ text-align:center; transition: opacity 0.15s linear; }
+  @keyframes cardEnter{
+    from{ opacity:0; transform: translateY(40px) rotateY(-20deg); }
+    to{ opacity:1; transform: translateY(0) rotateY(0deg); }
+  }
+
+  /* 3D book */
+  .book-3d{
+    position:relative;
+    width:140px;
+    height:190px;
+    transform-style:preserve-3d;
+    transform: rotateX(8deg);
+    transition: transform 0.4s cubic-bezier(.2,.9,.25,1);
+  }
+  .book-card:hover .book-3d, .book-card.active .book-3d{
+    transform: rotateX(4deg) translateZ(30px) translateY(-8px);
+  }
+
+  /* Spine (front face) */
+  .book-spine{
+    position:absolute;
+    inset:0;
+    border-radius: 3px 2px 2px 3px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding: 16px 10px;
+    transform: translateZ(10px);
+    box-shadow:
+      0 20px 40px rgba(0,0,0,0.55),
+      0 6px 12px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.12);
+    overflow:hidden;
+  }
+  .book-spine::before{
+    content:'';
+    position:absolute;
+    left:0; top:0; bottom:0; width:3px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 3px 0 0 3px;
+  }
+  .book-spine::after{
+    content:'';
+    position:absolute;
+    right:0; top:0; bottom:0; width:2px;
+    background: rgba(0,0,0,0.25);
+  }
+
+  .spine-shine{
+    position:absolute;
+    top:0; left:-60%; width:60%; height:100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: skewX(-18deg);
+    transition: left 0.7s ease;
+  }
+  .book-card:hover .spine-shine, .book-card.active .spine-shine{
+    left:130%;
+  }
+
+  .spine-icon{ font-size:28px; position:relative; z-index:1; }
+  .spine-title{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.02em;
+    position:relative;
+    z-index:1;
+    text-align:center;
+  }
+
+  /* Book colors */
+  .book-spine.janus{
+    background: linear-gradient(160deg, #f0ede5 0%, #e0dbd0 50%, #d4cfc2 100%);
+    color: #1a1a1a;
+  }
+  .book-spine.janus .spine-icon{ color:#4a3f6b; }
+
+  .book-spine.youtube{
+    background: linear-gradient(160deg, #ff4444 0%, #cc0000 50%, #8a0000 100%);
+    color: #fff;
+  }
+
+  .book-spine.tiktok{
+    background: linear-gradient(160deg, #1a1a1a 0%, #0c0c0c 50%, #000 100%);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .book-spine.tiktok .spine-icon{
+    background: linear-gradient(135deg,#25f4ee,#fe2c55);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  .book-spine.quotes{
+    background: linear-gradient(160deg, #2a2350 0%, #1a1535 50%, #0f0c22 100%);
+    color: #d8b466;
+    border: 1px solid rgba(216,180,102,0.18);
+  }
+
+  /* Pages on the right */
+  .book-pages-right{
+    position:absolute;
+    right: -9px;
+    top: 2px;
+    bottom: 2px;
+    width: 12px;
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(235,230,215,0.9) 0px,
+      rgba(235,230,215,0.9) 1px,
+      rgba(195,185,165,0.6) 1px,
+      rgba(195,185,165,0.6) 3px
+    );
+    transform: rotateY(28deg) translateZ(-2px);
+    border-radius: 0 2px 2px 0;
+    box-shadow: inset -2px 0 4px rgba(0,0,0,0.2);
+  }
+  .book-pages-right::before{
+    content:'';
+    position:absolute;
+    right:0; top:0; bottom:0; width:1px;
+    background: rgba(0,0,0,0.25);
+  }
+
+  /* Pages on top */
+  .book-pages-top{
+    position:absolute;
+    top: -7px;
+    left: 3px;
+    right: 3px;
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(235,230,215,0.85) 0px,
+      rgba(235,230,215,0.85) 1px,
+      rgba(195,185,165,0.5) 1px,
+      rgba(195,185,165,0.5) 3px
+    );
+    transform: rotateX(-55deg) translateZ(-1px);
+    border-radius: 2px 2px 0 0;
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.15);
+  }
+
+  /* Shadow */
+  .book-shadow{
+    position:absolute;
+    bottom: -18px;
+    left: 8%;
+    right: 8%;
+    height: 14px;
+    background: rgba(0,0,0,0.45);
+    border-radius: 50%;
+    filter: blur(10px);
+    transform: translateZ(-25px);
+    transition: all 0.4s ease;
+  }
+  .book-card:hover .book-shadow, .book-card.active .book-shadow{
+    bottom: -24px;
+    left: 2%;
+    right: 2%;
+    background: rgba(0,0,0,0.6);
+    filter: blur(14px);
+  }
+
+  /* Label */
+  .label{ text-align:center; transition: opacity 0.2s linear, transform 0.3s ease; }
   .label .t{ font-size:14px; font-weight:600; display:block; }
-  .label .s{ font-size:11px; color:var(--muted); display:block; margin-top:2px; }
+  .label .s{ font-size:11px; color:var(--muted); display:block; margin-top:3px; }
 
   /* ---------- open book modal ---------- */
   .backdrop{
-    position:fixed; inset:0; background:rgba(2,2,6,0.7);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    position:fixed; inset:0; background:rgba(2,2,8,0.75);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     opacity:0; pointer-events:none; transition: opacity 0.4s ease;
     z-index:9;
   }
@@ -114,9 +285,9 @@
 
   .open-book{
     position:fixed;
-    background:linear-gradient(160deg,#221c40,#0f0c22);
+    background:linear-gradient(160deg,#1e1840,#0d0a1f);
     border-radius:14px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
     z-index:10;
     display:none;
     overflow:hidden;
@@ -126,17 +297,19 @@
 
   .book-close{
     position:absolute; top:14px; right:14px;
-    width:30px; height:30px; border-radius:50%;
+    width:32px; height:32px; border-radius:50%;
     background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18);
     color:var(--text); display:flex; align-items:center; justify-content:center;
-    font-size:13px; cursor:pointer; opacity:0; transition: opacity 0.3s ease 0.3s;
+    font-size:13px; cursor:pointer; opacity:0; transition: opacity 0.3s ease 0.3s, background 0.2s ease;
+    z-index:5;
   }
+  .book-close:hover{ background:rgba(255,255,255,0.2); }
   .open-book.opened .book-close{ opacity:1; }
 
   .page-inner{
     position:absolute; inset:0;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding: 40px 30px;
+    padding: 44px 32px;
     text-align:center;
     opacity:0;
     transform: rotateY(0deg);
@@ -146,20 +319,134 @@
   .open-book.opened .page-inner{ opacity:1; }
   .page-inner.turning{ transform: rotateY(-92deg); opacity:0.2; }
 
-  .page-inner i.quill{ color:#d8b466; font-size:16px; opacity:0.85; margin-bottom:18px; }
-  .quote-text{ font-family:'Fraunces',serif; font-style:italic; font-size:19px; line-height:1.55; }
-  .quote-by{ margin-top:16px; font-size:12px; letter-spacing:0.04em; color:var(--muted); text-transform:uppercase; }
-  .quote-tap{ margin-top:26px; font-size:10.5px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase; display:flex; align-items:center; gap:6px; }
+  .page-inner i.quill{ color:#d8b466; font-size:18px; opacity:0.85; margin-bottom:20px; }
+  .quote-text{ font-family:'Fraunces',serif; font-style:italic; font-size:20px; line-height:1.6; color:var(--text); }
+  .quote-by{ margin-top:18px; font-size:12px; letter-spacing:0.04em; color:var(--muted); text-transform:uppercase; }
+  .quote-tap{ margin-top:28px; font-size:10.5px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase; display:flex; align-items:center; gap:6px; }
 
-  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important; } }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+    .book-card{ opacity:1; animation:none; }
+    .city-map .layer-1, .city-map .layer-2, .city-map .layer-3, .city-map .layer-4{ animation:none; }
+    .city-map .pulse-dot{ animation:none; opacity:0.5; }
+  }
 </style>
+<base target="_blank">
 </head>
 <body>
 
-<div class="space">
-  <div class="nebula n1"></div>
-  <div class="nebula n2"></div>
-  <div class="stars" id="stars"></div>
+<!-- Animated topographical city map background -->
+<div class="city-map">
+  <!-- Layer 1: outer contours -->
+  <svg class="layer-1" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#1a1a3e;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#0d0d22;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="800" fill="url(#grad1)"/>
+    <!-- Contour lines -->
+    <path d="M-50,150 Q200,80 400,180 T800,120 T1250,200" stroke="rgba(60,70,140,0.35)" stroke-width="1.5" fill="none"/>
+    <path d="M-50,220 Q250,140 500,240 T900,160 T1250,280" stroke="rgba(60,70,140,0.3)" stroke-width="1.2" fill="none"/>
+    <path d="M-50,300 Q300,200 550,310 T950,220 T1250,360" stroke="rgba(60,70,140,0.25)" stroke-width="1" fill="none"/>
+    <path d="M-50,400 Q350,280 600,410 T1000,300 T1250,460" stroke="rgba(60,70,140,0.2)" stroke-width="1" fill="none"/>
+    <path d="M-50,520 Q400,380 650,520 T1050,400 T1250,580" stroke="rgba(60,70,140,0.15)" stroke-width="1" fill="none"/>
+    <path d="M-50,650 Q450,500 700,650 T1100,520 T1250,720" stroke="rgba(60,70,140,0.12)" stroke-width="0.8" fill="none"/>
+    <!-- Vertical-ish contours -->
+    <path d="M150,-50 Q120,200 180,400 T140,850" stroke="rgba(60,70,140,0.2)" stroke-width="1" fill="none"/>
+    <path d="M350,-50 Q320,200 380,400 T340,850" stroke="rgba(60,70,140,0.18)" stroke-width="1" fill="none"/>
+    <path d="M550,-50 Q520,200 580,400 T540,850" stroke="rgba(60,70,140,0.15)" stroke-width="1" fill="none"/>
+    <path d="M750,-50 Q720,200 780,400 T740,850" stroke="rgba(60,70,140,0.12)" stroke-width="0.8" fill="none"/>
+    <path d="M950,-50 Q920,200 980,400 T940,850" stroke="rgba(60,70,140,0.1)" stroke-width="0.8" fill="none"/>
+    <!-- Building blocks -->
+    <rect x="280" y="180" width="60" height="60" rx="2" stroke="rgba(80,90,160,0.25)" stroke-width="1" fill="none"/>
+    <rect x="290" y="190" width="40" height="40" rx="1" stroke="rgba(80,90,160,0.2)" stroke-width="0.8" fill="none"/>
+    <rect x="300" y="200" width="20" height="20" rx="1" stroke="rgba(80,90,160,0.15)" stroke-width="0.6" fill="none"/>
+    <rect x="620" y="280" width="80" height="80" rx="2" stroke="rgba(80,90,160,0.22)" stroke-width="1" fill="none"/>
+    <rect x="635" y="295" width="50" height="50" rx="1" stroke="rgba(80,90,160,0.18)" stroke-width="0.8" fill="none"/>
+    <rect x="850" y="150" width="50" height="50" rx="2" stroke="rgba(80,90,160,0.2)" stroke-width="1" fill="none"/>
+    <rect x="860" y="160" width="30" height="30" rx="1" stroke="rgba(80,90,160,0.15)" stroke-width="0.8" fill="none"/>
+    <rect x="420" y="450" width="70" height="70" rx="2" stroke="rgba(80,90,160,0.2)" stroke-width="1" fill="none"/>
+    <rect x="180" y="520" width="55" height="55" rx="2" stroke="rgba(80,90,160,0.18)" stroke-width="1" fill="none"/>
+    <rect x="750" y="480" width="65" height="65" rx="2" stroke="rgba(80,90,160,0.2)" stroke-width="1" fill="none"/>
+    <!-- Roads -->
+    <line x1="0" y1="350" x2="1200" y2="350" stroke="rgba(100,110,180,0.12)" stroke-width="0.8" stroke-dasharray="8,6"/>
+    <line x1="0" y1="550" x2="1200" y2="550" stroke="rgba(100,110,180,0.1)" stroke-width="0.8" stroke-dasharray="8,6"/>
+    <line x1="480" y1="0" x2="480" y2="800" stroke="rgba(100,110,180,0.1)" stroke-width="0.8" stroke-dasharray="8,6"/>
+    <line x1="880" y1="0" x2="880" y2="800" stroke="rgba(100,110,180,0.08)" stroke-width="0.8" stroke-dasharray="8,6"/>
+  </svg>
+
+  <!-- Layer 2: mid contours -->
+  <svg class="layer-2" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <path d="M-50,100 Q300,20 600,120 T1100,60 T1250,160" stroke="rgba(90,100,170,0.3)" stroke-width="1.2" fill="none"/>
+    <path d="M-50,180 Q350,100 650,190 T1150,130 T1250,240" stroke="rgba(90,100,170,0.25)" stroke-width="1" fill="none"/>
+    <path d="M-50,260 Q400,170 700,270 T1200,200 T1250,320" stroke="rgba(90,100,170,0.2)" stroke-width="1" fill="none"/>
+    <path d="M-50,360 Q450,260 750,370 T1250,280 T1250,420" stroke="rgba(90,100,170,0.15)" stroke-width="0.9" fill="none"/>
+    <path d="M-50,480 Q500,360 800,480 T1250,380 T1250,540" stroke="rgba(90,100,170,0.12)" stroke-width="0.8" fill="none"/>
+    <path d="M-50,600 Q550,480 850,600 T1250,500 T1250,680" stroke="rgba(90,100,170,0.1)" stroke-width="0.7" fill="none"/>
+    <path d="M220,-50 Q190,200 250,400 T210,850" stroke="rgba(90,100,170,0.15)" stroke-width="0.9" fill="none"/>
+    <path d="M480,-50 Q450,200 510,400 T470,850" stroke="rgba(90,100,170,0.12)" stroke-width="0.8" fill="none"/>
+    <path d="M780,-50 Q750,200 810,400 T770,850" stroke="rgba(90,100,170,0.1)" stroke-width="0.7" fill="none"/>
+    <!-- More buildings -->
+    <rect x="150" y="220" width="45" height="45" rx="1" stroke="rgba(100,110,180,0.2)" stroke-width="0.8" fill="none"/>
+    <rect x="520" y="380" width="55" height="55" rx="1" stroke="rgba(100,110,180,0.18)" stroke-width="0.8" fill="none"/>
+    <rect x="720" y="200" width="40" height="40" rx="1" stroke="rgba(100,110,180,0.15)" stroke-width="0.7" fill="none"/>
+    <rect x="320" y="520" width="50" height="50" rx="1" stroke="rgba(100,110,180,0.16)" stroke-width="0.8" fill="none"/>
+    <rect x="980" y="420" width="45" height="45" rx="1" stroke="rgba(100,110,180,0.14)" stroke-width="0.7" fill="none"/>
+  </svg>
+
+  <!-- Layer 3: inner detail contours -->
+  <svg class="layer-3" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <path d="M-50,130 Q400,50 700,140 T1200,80 T1250,190" stroke="rgba(120,130,190,0.25)" stroke-width="1" fill="none"/>
+    <path d="M-50,210 Q450,130 750,220 T1250,150 T1250,270" stroke="rgba(120,130,190,0.2)" stroke-width="0.9" fill="none"/>
+    <path d="M-50,290 Q500,210 800,300 T1250,230 T1250,350" stroke="rgba(120,130,190,0.16)" stroke-width="0.8" fill="none"/>
+    <path d="M-50,390 Q550,300 850,390 T1250,320 T1250,450" stroke="rgba(120,130,190,0.13)" stroke-width="0.7" fill="none"/>
+    <path d="M-50,510 Q600,400 900,510 T1250,430 T1250,570" stroke="rgba(120,130,190,0.1)" stroke-width="0.7" fill="none"/>
+    <path d="M300,-50 Q270,200 330,400 T290,850" stroke="rgba(120,130,190,0.12)" stroke-width="0.8" fill="none"/>
+    <path d="M650,-50 Q620,200 680,400 T640,850" stroke="rgba(120,130,190,0.1)" stroke-width="0.7" fill="none"/>
+    <path d="M1000,-50 Q970,200 1030,400 T990,850" stroke="rgba(120,130,190,0.08)" stroke-width="0.6" fill="none"/>
+    <!-- Small blocks -->
+    <rect x="380" y="260" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.15)" stroke-width="0.6" fill="none"/>
+    <rect x="580" y="160" width="30" height="30" rx="1" stroke="rgba(120,130,190,0.12)" stroke-width="0.6" fill="none"/>
+    <rect x="820" y="340" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.13)" stroke-width="0.6" fill="none"/>
+    <rect x="250" y="420" width="30" height="30" rx="1" stroke="rgba(120,130,190,0.11)" stroke-width="0.6" fill="none"/>
+    <rect x="1080" y="280" width="30" height="30" rx="1" stroke="rgba(120,130,190,0.1)" stroke-width="0.5" fill="none"/>
+  </svg>
+
+  <!-- Layer 4: city lights -->
+  <svg class="layer-4" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <!-- Warm lights -->
+    <circle cx="310" cy="210" r="2" fill="#d4a843" class="pulse-dot"/>
+    <circle cx="660" cy="320" r="2" fill="#d4a843" class="pulse-dot d2"/>
+    <circle cx="875" cy="175" r="2" fill="#d4a843" class="pulse-dot d3"/>
+    <circle cx="455" cy="485" r="2" fill="#d4a843" class="pulse-dot"/>
+    <circle cx="210" cy="547" r="2" fill="#d4a843" class="pulse-dot d2"/>
+    <circle cx="785" cy="512" r="2" fill="#d4a843" class="pulse-dot d3"/>
+    <circle cx="170" cy="242" r="2" fill="#d4a843" class="pulse-dot"/>
+    <circle cx="545" cy="407" r="2" fill="#d4a843" class="pulse-dot d2"/>
+    <circle cx="740" cy="220" r="2" fill="#d4a843" class="pulse-dot d3"/>
+    <circle cx="345" cy="545" r="2" fill="#d4a843" class="pulse-dot"/>
+    <circle cx="1000" cy="442" r="2" fill="#d4a843" class="pulse-dot d2"/>
+    <circle cx="400" cy="278" r="2" fill="#d4a843" class="pulse-dot d3"/>
+    <circle cx="595" cy="175" r="2" fill="#d4a843" class="pulse-dot"/>
+    <circle cx="840" cy="357" r="2" fill="#d4a843" class="pulse-dot d2"/>
+    <circle cx="265" cy="435" r="2" fill="#d4a843" class="pulse-dot d3"/>
+    <!-- Cool lights -->
+    <circle cx="350" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+    <circle cx="700" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
+    <circle cx="900" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
+    <circle cx="500" cy="470" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+    <circle cx="200" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
+    <circle cx="800" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
+    <circle cx="600" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+    <circle cx="400" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
+    <circle cx="1100" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
+    <circle cx="300" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+    <circle cx="1000" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
+    <circle cx="500" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
+    <circle cx="750" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+  </svg>
 </div>
 
 <div class="page">
@@ -167,36 +454,72 @@
     <h1>Maks Gorin</h1>
     <p>Montréal</p>
   </header>
-  <p class="hint">Scroll the shelf · tap a book</p>
+  <p class="hint">Swipe to browse · tap a book</p>
 
-  <div class="shelf" id="shelf">
-    <div class="shelf-track" id="shelfTrack">
+  <div class="carousel-wrap" id="carousel">
+    <div class="carousel-track" id="track">
 
-      <a class="cover-card" data-type="link" href="https://januslabsco.com" data-web="https://januslabsco.com">
-        <div class="cover janus"><img src="assets/janus-logo-icon.png" alt=""><div class="pages"></div></div>
-        <div class="label"><span class="t">Studio</span><span class="s">januslabsco.com</span></div>
+      <a class="book-card" data-type="link" href="https://januslabsco.com" data-web="https://januslabsco.com">
+        <div class="book-3d">
+          <div class="book-spine janus">
+            <div class="spine-shine"></div>
+            <i class="fa-solid fa-briefcase spine-icon"></i>
+            <span class="spine-title">Studio</span>
+          </div>
+          <div class="book-pages-right"></div>
+          <div class="book-pages-top"></div>
+          <div class="book-shadow"></div>
+        </div>
+        <div class="label"><span class="t">Janus Labs</span><span class="s">januslabsco.com</span></div>
       </a>
 
-      <a class="cover-card" data-type="link"
+      <a class="book-card" data-type="link"
          href="https://www.youtube.com/@maksgorin2687"
          data-web="https://www.youtube.com/@maksgorin2687"
          data-ios="youtube://www.youtube.com/@maksgorin2687"
          data-android-package="com.google.android.youtube">
-        <div class="cover youtube"><i class="fa-solid fa-play"></i><div class="pages"></div></div>
-        <div class="label"><span class="t">YouTube</span><span class="s">@maksgorin2687</span></div>
+        <div class="book-3d">
+          <div class="book-spine youtube">
+            <div class="spine-shine"></div>
+            <i class="fa-brands fa-youtube spine-icon"></i>
+            <span class="spine-title">YouTube</span>
+          </div>
+          <div class="book-pages-right"></div>
+          <div class="book-pages-top"></div>
+          <div class="book-shadow"></div>
+        </div>
+        <div class="label"><span class="t">@maksgorin2687</span><span class="s">Video content</span></div>
       </a>
 
-      <a class="cover-card" data-type="link"
+      <a class="book-card" data-type="link"
          href="https://www.tiktok.com/@maksgorin1"
          data-web="https://www.tiktok.com/@maksgorin1"
          data-android-package="com.zhiliaoapp.musically">
-        <div class="cover tiktok"><i class="fa-brands fa-tiktok"></i><div class="pages"></div></div>
-        <div class="label"><span class="t">TikTok</span><span class="s">@maksgorin1</span></div>
+        <div class="book-3d">
+          <div class="book-spine tiktok">
+            <div class="spine-shine"></div>
+            <i class="fa-brands fa-tiktok spine-icon"></i>
+            <span class="spine-title">TikTok</span>
+          </div>
+          <div class="book-pages-right"></div>
+          <div class="book-pages-top"></div>
+          <div class="book-shadow"></div>
+        </div>
+        <div class="label"><span class="t">@maksgorin1</span><span class="s">Short form</span></div>
       </a>
 
-      <div class="cover-card" data-type="quotes" id="quoteBook">
-        <div class="cover quotes"><i class="fa-solid fa-feather"></i><div class="pages"></div></div>
-        <div class="label"><span class="t">Quotes</span><span class="s">tap to open</span></div>
+      <div class="book-card" data-type="quotes" id="quoteBook">
+        <div class="book-3d">
+          <div class="book-spine quotes">
+            <div class="spine-shine"></div>
+            <i class="fa-solid fa-feather spine-icon"></i>
+            <span class="spine-title">Quotes</span>
+          </div>
+          <div class="book-pages-right"></div>
+          <div class="book-pages-top"></div>
+          <div class="book-shadow"></div>
+        </div>
+        <div class="label"><span class="t">Wisdom</span><span class="s">Tap to read</span></div>
       </div>
 
     </div>
@@ -216,45 +539,40 @@
 
 <script>
 (function(){
-  // starfield
-  var starsEl = document.getElementById('stars');
-  var frag = document.createDocumentFragment();
-  for (var i=0;i<70;i++){
-    var s=document.createElement('div'); s.className='star';
-    s.style.left=(Math.random()*100)+'%'; s.style.top=(Math.random()*100)+'%';
-    s.style.animationDelay=(Math.random()*3.5)+'s';
-    var size=Math.random()*1.6+1; s.style.width=size+'px'; s.style.height=size+'px';
-    frag.appendChild(s);
-  }
-  starsEl.appendChild(frag);
-
-  // ---------- coverflow ----------
-  var shelf = document.getElementById('shelf');
-  var cards = Array.prototype.slice.call(document.querySelectorAll('.cover-card'));
+  // ---------- 3D coverflow carousel ----------
+  var carousel = document.getElementById('carousel');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.book-card'));
   var ticking = false;
 
   function updateCoverflow(){
-    var rect = shelf.getBoundingClientRect();
+    var rect = carousel.getBoundingClientRect();
     var centerX = rect.left + rect.width/2;
     cards.forEach(function(card){
       var cRect = card.getBoundingClientRect();
       var cCenter = cRect.left + cRect.width/2;
       var delta = (cCenter - centerX) / (rect.width/2);
       var clamped = Math.max(-1.3, Math.min(1.3, delta));
-      var rotateY = -clamped*30;
-      var scale = 1 - Math.min(Math.abs(clamped),1)*0.24;
-      var bright = 1 - Math.min(Math.abs(clamped),1)*0.4;
-      card.style.transform = 'rotateY('+rotateY+'deg) scale('+scale+')';
+      var rotateY = -clamped*32;
+      var rotateX = 8 - Math.abs(clamped)*3;
+      var scale = 1 - Math.min(Math.abs(clamped),1)*0.22;
+      var bright = 1 - Math.min(Math.abs(clamped),1)*0.45;
+      var z = (1 - Math.abs(clamped)) * 50;
+      card.style.transform = 'rotateY('+rotateY+'deg) rotateX('+rotateX+'deg) scale('+scale+') translateZ('+z+'px)';
       card.style.zIndex = Math.round((1-Math.abs(clamped))*100);
-      card.querySelector('.cover').style.filter = 'brightness('+bright+')';
-      card.querySelector('.label').style.opacity = 1 - Math.min(Math.abs(clamped),1)*0.75;
+      card.querySelector('.book-spine').style.filter = 'brightness('+bright+')';
+      card.querySelector('.label').style.opacity = 1 - Math.min(Math.abs(clamped),1)*0.7;
+      if (Math.abs(clamped) < 0.15) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
     });
     ticking = false;
   }
   function onScroll(){
     if (!ticking){ requestAnimationFrame(updateCoverflow); ticking = true; }
   }
-  shelf.addEventListener('scroll', onScroll, { passive:true });
+  carousel.addEventListener('scroll', onScroll, { passive:true });
   window.addEventListener('resize', updateCoverflow);
   updateCoverflow();
 
@@ -337,10 +655,10 @@
   }
 
   function openTheBook(){
-    var startRect = quoteBook.querySelector('.cover').getBoundingClientRect();
+    var startRect = quoteBook.querySelector('.book-3d').getBoundingClientRect();
     var vw = window.innerWidth, vh = window.innerHeight;
-    var targetW = Math.min(340, vw*0.86);
-    var targetH = Math.min(440, vh*0.72);
+    var targetW = Math.min(360, vw*0.9);
+    var targetH = Math.min(480, vh*0.75);
     var targetLeft = (vw - targetW)/2;
     var targetTop = (vh - targetH)/2;
 
@@ -356,10 +674,7 @@
     var sx = startRect.width / targetW;
     var sy = startRect.height / targetH;
 
-    // no 'animating' class yet, so this initial jump to the shelf-slot
-    // position/size happens instantly, with no transition applied
     openBook.style.transform = 'translate('+dx+'px,'+dy+'px) scale('+sx+','+sy+')';
-    // force reflow so the browser registers the position above before animating
     openBook.offsetHeight;
 
     backdrop.classList.add('show');
@@ -383,12 +698,11 @@
       markOpened();
     };
     openBook.addEventListener('transitionend', onEnd);
-    // safety net in case transitionend doesn't fire on some browsers
     setTimeout(markOpened, 650);
   }
 
   function closeTheBook(){
-    var startRect = quoteBook.querySelector('.cover').getBoundingClientRect();
+    var startRect = quoteBook.querySelector('.book-3d').getBoundingClientRect();
     var currentRect = openBook.getBoundingClientRect();
     var dx = (startRect.left + startRect.width/2) - (currentRect.left + currentRect.width/2);
     var dy = (startRect.top + startRect.height/2) - (currentRect.top + currentRect.height/2);
