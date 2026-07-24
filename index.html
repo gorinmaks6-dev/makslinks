@@ -305,6 +305,13 @@
     { q:"Knowing yourself is the beginning of all wisdom.", by:"Aristotle" },
     { q:"The only true wisdom is in knowing you know nothing.", by:"Socrates" },
     { q:"Simplicity is the ultimate sophistication.", by:"Leonardo da Vinci" },
+    { q:"Know thyself.", by:"Ancient Greek maxim" },
+    { q:"This too shall pass.", by:"Traditional proverb" },
+    { q:"Carpe diem.", by:"Horace" },
+    { q:"Fortune favors the bold.", by:"Virgil" },
+    { q:"Knowledge is power.", by:"Francis Bacon" },
+    { q:"Imagination rules the world.", by:"Napoleon Bonaparte" },
+    { q:"The only thing we have to fear is fear itself.", by:"Franklin D. Roosevelt" },
     { q:"The lamp that guides a sailor home burns brightest in the dark.", by:"an old ship captain's log" },
     { q:"A garden grown in silence still feeds the whole village.", by:"anonymous, attrib. folk proverb" }
   ];
@@ -349,9 +356,10 @@
     var sx = startRect.width / targetW;
     var sy = startRect.height / targetH;
 
-    openBook.style.transition = 'none';
+    // no 'animating' class yet, so this initial jump to the shelf-slot
+    // position/size happens instantly, with no transition applied
     openBook.style.transform = 'translate('+dx+'px,'+dy+'px) scale('+sx+','+sy+')';
-    // force reflow
+    // force reflow so the browser registers the position above before animating
     openBook.offsetHeight;
 
     backdrop.classList.add('show');
@@ -362,13 +370,21 @@
 
     setQuoteContent();
 
-    var onEnd = function(e){
-      if (e.propertyName !== 'transform') return;
+    var settled = false;
+    function markOpened(){
+      if (settled) return;
+      settled = true;
       openBook.removeEventListener('transitionend', onEnd);
       openBook.classList.add('opened');
       isOpen = true;
+    }
+    var onEnd = function(e){
+      if (e.target !== openBook || e.propertyName !== 'transform') return;
+      markOpened();
     };
     openBook.addEventListener('transitionend', onEnd);
+    // safety net in case transitionend doesn't fire on some browsers
+    setTimeout(markOpened, 650);
   }
 
   function closeTheBook(){
@@ -383,14 +399,21 @@
     backdrop.classList.remove('show');
     openBook.style.transform = 'translate('+dx+'px,'+dy+'px) scale('+sx+','+sy+')';
 
-    var onEnd = function(e){
-      if (e.propertyName !== 'transform') return;
+    var settled = false;
+    function markClosed(){
+      if (settled) return;
+      settled = true;
       openBook.removeEventListener('transitionend', onEnd);
       openBook.classList.remove('visible', 'animating');
       openBook.style.transform = 'none';
       isOpen = false;
+    }
+    var onEnd = function(e){
+      if (e.target !== openBook || e.propertyName !== 'transform') return;
+      markClosed();
     };
     openBook.addEventListener('transitionend', onEnd);
+    setTimeout(markClosed, 650);
   }
 
   function turnPage(){
