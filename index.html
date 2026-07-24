@@ -8,10 +8,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="icon" href="assets/janus-logo-icon.png" type="image/png">
 <style>
   :root{
-    --text:#e8e6e1;
-    --muted: rgba(232,230,225,0.55);
+    --text:#f0eeea;
+    --muted: rgba(240,238,234,0.55);
     --card: rgba(255,255,255,0.06);
     --card-border: rgba(255,255,255,0.12);
   }
@@ -25,42 +26,83 @@
     height:100%;
   }
 
-  /* ---------- animated topographical city map background ---------- */
-  .city-map{
+  /* ---------- background: user's bg.jpg + animated topo overlay ---------- */
+  .bg-wrap{
     position:fixed; inset:0; z-index:0;
-    background: #070714;
     overflow:hidden;
   }
-  .city-map svg{
+  .bg-wrap .bg-img{
+    position:absolute; inset:0;
+    background: url('assets/bg.jpg') center/cover no-repeat;
+    transform: scale(1.08);
+    animation: bgDrift 30s ease-in-out infinite;
+  }
+  @keyframes bgDrift{
+    0%,100%{ transform: scale(1.08) translate(0,0); }
+    50%{ transform: scale(1.12) translate(-1%,-1%); }
+  }
+  .bg-wrap .bg-overlay{
+    position:absolute; inset:0;
+    background: rgba(7,7,20,0.72);
+    backdrop-filter: blur(1px);
+  }
+  .bg-wrap .bg-vignette{
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(7,7,20,0.9) 100%);
+  }
+
+  /* Animated topographical overlay */
+  .topo-layer{
+    position:absolute; inset:0;
+    opacity:0.35;
+  }
+  .topo-layer svg{
     position:absolute;
     width:120%; height:120%;
     left:-10%; top:-10%;
   }
-  .city-map .layer-1{ animation: driftMap 60s linear infinite; }
-  .city-map .layer-2{ animation: driftMap 45s linear infinite reverse; opacity:0.6; }
-  .city-map .layer-3{ animation: driftMap 35s linear infinite; opacity:0.4; }
-  .city-map .layer-4{ animation: driftMap 80s linear infinite reverse; opacity:0.25; }
-  @keyframes driftMap{
+  .topo-layer .t1{ animation: topoDrift 50s linear infinite; }
+  .topo-layer .t2{ animation: topoDrift 38s linear infinite reverse; opacity:0.5; }
+  .topo-layer .t3{ animation: topoDrift 28s linear infinite; opacity:0.3; }
+  @keyframes topoDrift{
     0%{ transform: translate(0,0); }
-    50%{ transform: translate(4%,3%); }
+    50%{ transform: translate(3%,2%); }
     100%{ transform: translate(0,0); }
   }
-  .city-map .pulse-dot{
+  .pulse-dot{
     animation: pulseLight 4s ease-in-out infinite;
   }
-  .city-map .pulse-dot.d2{ animation-delay:-1.3s; }
-  .city-map .pulse-dot.d3{ animation-delay:-2.6s; }
+  .pulse-dot.d2{ animation-delay:-1.3s; }
+  .pulse-dot.d3{ animation-delay:-2.6s; }
   @keyframes pulseLight{
-    0%,100%{ opacity:0.15; r:1.5; }
-    50%{ opacity:0.9; r:3; }
+    0%,100%{ opacity:0.1; r:1.2; }
+    50%{ opacity:0.8; r:2.8; }
   }
 
   /* ---------- layout ---------- */
   .page{ position:relative; z-index:1; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; }
-  header{ text-align:center; padding: max(44px, env(safe-area-inset-top) + 28px) 20px 8px; }
-  header h1{ margin:0; font-family:'Fraunces',serif; font-weight:600; font-size:clamp(28px,7vw,40px); letter-spacing:-0.01em; }
-  header p{ margin:8px 0 0; font-size:13px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; }
-  .hint{ text-align:center; font-size:12px; color:var(--muted); margin: 8px 0 0; letter-spacing:0.02em; }
+  header{ text-align:center; padding: max(40px, env(safe-area-inset-top) + 24px) 20px 6px; }
+
+  /* Profile avatar */
+  .avatar-wrap{
+    position:relative;
+    width:72px; height:72px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    padding:3px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  }
+  .avatar-wrap img{
+    width:100%; height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    display:block;
+    background:#111;
+  }
+
+  header h1{ margin:0; font-family:'Fraunces',serif; font-weight:600; font-size:clamp(26px,7vw,38px); letter-spacing:-0.01em; }
+  header p{ margin:6px 0 0; font-size:12px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; }
+  .hint{ text-align:center; font-size:11.5px; color:var(--muted); margin: 6px 0 0; letter-spacing:0.02em; }
 
   /* ---------- 3D carousel ---------- */
   .carousel-wrap{
@@ -78,13 +120,13 @@
   .carousel-track{
     display:flex;
     align-items:flex-end;
-    gap: 36px;
-    padding: 40px calc(50% - 70px) 60px;
+    gap: 38px;
+    padding: 40px calc(50% - 72px) 60px;
   }
 
   .book-card{
     flex-shrink:0;
-    width:140px;
+    width:144px;
     scroll-snap-align:center;
     display:flex;
     flex-direction:column;
@@ -112,8 +154,8 @@
   /* 3D book */
   .book-3d{
     position:relative;
-    width:140px;
-    height:190px;
+    width:144px;
+    height:196px;
     transform-style:preserve-3d;
     transform: rotateX(8deg);
     transition: transform 0.4s cubic-bezier(.2,.9,.25,1);
@@ -166,6 +208,13 @@
   }
 
   .spine-icon{ font-size:28px; position:relative; z-index:1; }
+  .spine-icon-img{
+    width:44px; height:44px;
+    object-fit:contain;
+    position:relative;
+    z-index:1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
   .spine-title{
     font-family:'Fraunces',serif;
     font-weight:600;
@@ -181,13 +230,10 @@
     background: linear-gradient(160deg, #f0ede5 0%, #e0dbd0 50%, #d4cfc2 100%);
     color: #1a1a1a;
   }
-  .book-spine.janus .spine-icon{ color:#4a3f6b; }
-
   .book-spine.youtube{
     background: linear-gradient(160deg, #ff4444 0%, #cc0000 50%, #8a0000 100%);
     color: #fff;
   }
-
   .book-spine.tiktok{
     background: linear-gradient(160deg, #1a1a1a 0%, #0c0c0c 50%, #000 100%);
     color: #fff;
@@ -197,7 +243,6 @@
     background: linear-gradient(135deg,#25f4ee,#fe2c55);
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
-
   .book-spine.quotes{
     background: linear-gradient(160deg, #2a2350 0%, #1a1535 50%, #0f0c22 100%);
     color: #d8b466;
@@ -276,8 +321,8 @@
 
   /* ---------- open book modal ---------- */
   .backdrop{
-    position:fixed; inset:0; background:rgba(2,2,8,0.75);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    position:fixed; inset:0; background:rgba(2,2,8,0.78);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     opacity:0; pointer-events:none; transition: opacity 0.4s ease;
     z-index:9;
   }
@@ -327,130 +372,105 @@
   @media (prefers-reduced-motion: reduce){
     *{ transition:none !important; animation:none !important; }
     .book-card{ opacity:1; animation:none; }
-    .city-map .layer-1, .city-map .layer-2, .city-map .layer-3, .city-map .layer-4{ animation:none; }
-    .city-map .pulse-dot{ animation:none; opacity:0.5; }
+    .bg-wrap .bg-img{ animation:none; }
+    .topo-layer .t1, .topo-layer .t2, .topo-layer .t3{ animation:none; }
+    .pulse-dot{ animation:none; opacity:0.5; }
   }
 </style>
 <base target="_blank">
 </head>
 <body>
 
-<!-- Animated topographical city map background -->
-<div class="city-map">
-  <!-- Layer 1: outer contours -->
-  <svg class="layer-1" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-    <defs>
-      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#1a1a3e;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#0d0d22;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-    <rect width="1200" height="800" fill="url(#grad1)"/>
-    <!-- Contour lines -->
-    <path d="M-50,150 Q200,80 400,180 T800,120 T1250,200" stroke="rgba(60,70,140,0.35)" stroke-width="1.5" fill="none"/>
-    <path d="M-50,220 Q250,140 500,240 T900,160 T1250,280" stroke="rgba(60,70,140,0.3)" stroke-width="1.2" fill="none"/>
-    <path d="M-50,300 Q300,200 550,310 T950,220 T1250,360" stroke="rgba(60,70,140,0.25)" stroke-width="1" fill="none"/>
-    <path d="M-50,400 Q350,280 600,410 T1000,300 T1250,460" stroke="rgba(60,70,140,0.2)" stroke-width="1" fill="none"/>
-    <path d="M-50,520 Q400,380 650,520 T1050,400 T1250,580" stroke="rgba(60,70,140,0.15)" stroke-width="1" fill="none"/>
-    <path d="M-50,650 Q450,500 700,650 T1100,520 T1250,720" stroke="rgba(60,70,140,0.12)" stroke-width="0.8" fill="none"/>
-    <!-- Vertical-ish contours -->
-    <path d="M150,-50 Q120,200 180,400 T140,850" stroke="rgba(60,70,140,0.2)" stroke-width="1" fill="none"/>
-    <path d="M350,-50 Q320,200 380,400 T340,850" stroke="rgba(60,70,140,0.18)" stroke-width="1" fill="none"/>
-    <path d="M550,-50 Q520,200 580,400 T540,850" stroke="rgba(60,70,140,0.15)" stroke-width="1" fill="none"/>
-    <path d="M750,-50 Q720,200 780,400 T740,850" stroke="rgba(60,70,140,0.12)" stroke-width="0.8" fill="none"/>
-    <path d="M950,-50 Q920,200 980,400 T940,850" stroke="rgba(60,70,140,0.1)" stroke-width="0.8" fill="none"/>
-    <!-- Building blocks -->
-    <rect x="280" y="180" width="60" height="60" rx="2" stroke="rgba(80,90,160,0.25)" stroke-width="1" fill="none"/>
-    <rect x="290" y="190" width="40" height="40" rx="1" stroke="rgba(80,90,160,0.2)" stroke-width="0.8" fill="none"/>
-    <rect x="300" y="200" width="20" height="20" rx="1" stroke="rgba(80,90,160,0.15)" stroke-width="0.6" fill="none"/>
-    <rect x="620" y="280" width="80" height="80" rx="2" stroke="rgba(80,90,160,0.22)" stroke-width="1" fill="none"/>
-    <rect x="635" y="295" width="50" height="50" rx="1" stroke="rgba(80,90,160,0.18)" stroke-width="0.8" fill="none"/>
-    <rect x="850" y="150" width="50" height="50" rx="2" stroke="rgba(80,90,160,0.2)" stroke-width="1" fill="none"/>
-    <rect x="860" y="160" width="30" height="30" rx="1" stroke="rgba(80,90,160,0.15)" stroke-width="0.8" fill="none"/>
-    <rect x="420" y="450" width="70" height="70" rx="2" stroke="rgba(80,90,160,0.2)" stroke-width="1" fill="none"/>
-    <rect x="180" y="520" width="55" height="55" rx="2" stroke="rgba(80,90,160,0.18)" stroke-width="1" fill="none"/>
-    <rect x="750" y="480" width="65" height="65" rx="2" stroke="rgba(80,90,160,0.2)" stroke-width="1" fill="none"/>
-    <!-- Roads -->
-    <line x1="0" y1="350" x2="1200" y2="350" stroke="rgba(100,110,180,0.12)" stroke-width="0.8" stroke-dasharray="8,6"/>
-    <line x1="0" y1="550" x2="1200" y2="550" stroke="rgba(100,110,180,0.1)" stroke-width="0.8" stroke-dasharray="8,6"/>
-    <line x1="480" y1="0" x2="480" y2="800" stroke="rgba(100,110,180,0.1)" stroke-width="0.8" stroke-dasharray="8,6"/>
-    <line x1="880" y1="0" x2="880" y2="800" stroke="rgba(100,110,180,0.08)" stroke-width="0.8" stroke-dasharray="8,6"/>
-  </svg>
+<!-- Background: user's bg.jpg + dark overlay + animated topo + vignette -->
+<div class="bg-wrap">
+  <div class="bg-img"></div>
+  <div class="bg-overlay"></div>
 
-  <!-- Layer 2: mid contours -->
-  <svg class="layer-2" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-    <path d="M-50,100 Q300,20 600,120 T1100,60 T1250,160" stroke="rgba(90,100,170,0.3)" stroke-width="1.2" fill="none"/>
-    <path d="M-50,180 Q350,100 650,190 T1150,130 T1250,240" stroke="rgba(90,100,170,0.25)" stroke-width="1" fill="none"/>
-    <path d="M-50,260 Q400,170 700,270 T1200,200 T1250,320" stroke="rgba(90,100,170,0.2)" stroke-width="1" fill="none"/>
-    <path d="M-50,360 Q450,260 750,370 T1250,280 T1250,420" stroke="rgba(90,100,170,0.15)" stroke-width="0.9" fill="none"/>
-    <path d="M-50,480 Q500,360 800,480 T1250,380 T1250,540" stroke="rgba(90,100,170,0.12)" stroke-width="0.8" fill="none"/>
-    <path d="M-50,600 Q550,480 850,600 T1250,500 T1250,680" stroke="rgba(90,100,170,0.1)" stroke-width="0.7" fill="none"/>
-    <path d="M220,-50 Q190,200 250,400 T210,850" stroke="rgba(90,100,170,0.15)" stroke-width="0.9" fill="none"/>
-    <path d="M480,-50 Q450,200 510,400 T470,850" stroke="rgba(90,100,170,0.12)" stroke-width="0.8" fill="none"/>
-    <path d="M780,-50 Q750,200 810,400 T770,850" stroke="rgba(90,100,170,0.1)" stroke-width="0.7" fill="none"/>
-    <!-- More buildings -->
-    <rect x="150" y="220" width="45" height="45" rx="1" stroke="rgba(100,110,180,0.2)" stroke-width="0.8" fill="none"/>
-    <rect x="520" y="380" width="55" height="55" rx="1" stroke="rgba(100,110,180,0.18)" stroke-width="0.8" fill="none"/>
-    <rect x="720" y="200" width="40" height="40" rx="1" stroke="rgba(100,110,180,0.15)" stroke-width="0.7" fill="none"/>
-    <rect x="320" y="520" width="50" height="50" rx="1" stroke="rgba(100,110,180,0.16)" stroke-width="0.8" fill="none"/>
-    <rect x="980" y="420" width="45" height="45" rx="1" stroke="rgba(100,110,180,0.14)" stroke-width="0.7" fill="none"/>
-  </svg>
+  <!-- Animated topographical overlay -->
+  <div class="topo-layer">
+    <svg class="t1" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+      <path d="M-50,150 Q200,80 400,180 T800,120 T1250,200" stroke="rgba(80,90,160,0.3)" stroke-width="1.2" fill="none"/>
+      <path d="M-50,220 Q250,140 500,240 T900,160 T1250,280" stroke="rgba(80,90,160,0.25)" stroke-width="1" fill="none"/>
+      <path d="M-50,300 Q300,200 550,310 T950,220 T1250,360" stroke="rgba(80,90,160,0.2)" stroke-width="0.9" fill="none"/>
+      <path d="M-50,400 Q350,280 600,410 T1000,300 T1250,460" stroke="rgba(80,90,160,0.16)" stroke-width="0.8" fill="none"/>
+      <path d="M-50,520 Q400,380 650,520 T1050,400 T1250,580" stroke="rgba(80,90,160,0.12)" stroke-width="0.7" fill="none"/>
+      <path d="M150,-50 Q120,200 180,400 T140,850" stroke="rgba(80,90,160,0.18)" stroke-width="0.9" fill="none"/>
+      <path d="M350,-50 Q320,200 380,400 T340,850" stroke="rgba(80,90,160,0.15)" stroke-width="0.8" fill="none"/>
+      <path d="M550,-50 Q520,200 580,400 T540,850" stroke="rgba(80,90,160,0.12)" stroke-width="0.7" fill="none"/>
+      <path d="M750,-50 Q720,200 780,400 T740,850" stroke="rgba(80,90,160,0.1)" stroke-width="0.6" fill="none"/>
+      <rect x="280" y="180" width="60" height="60" rx="2" stroke="rgba(90,100,170,0.2)" stroke-width="0.8" fill="none"/>
+      <rect x="620" y="280" width="80" height="80" rx="2" stroke="rgba(90,100,170,0.18)" stroke-width="0.8" fill="none"/>
+      <rect x="850" y="150" width="50" height="50" rx="2" stroke="rgba(90,100,170,0.16)" stroke-width="0.7" fill="none"/>
+      <rect x="420" y="450" width="70" height="70" rx="2" stroke="rgba(90,100,170,0.15)" stroke-width="0.7" fill="none"/>
+      <line x1="0" y1="350" x2="1200" y2="350" stroke="rgba(100,110,180,0.1)" stroke-width="0.6" stroke-dasharray="8,6"/>
+      <line x1="0" y1="550" x2="1200" y2="550" stroke="rgba(100,110,180,0.08)" stroke-width="0.6" stroke-dasharray="8,6"/>
+      <line x1="480" y1="0" x2="480" y2="800" stroke="rgba(100,110,180,0.08)" stroke-width="0.6" stroke-dasharray="8,6"/>
+    </svg>
 
-  <!-- Layer 3: inner detail contours -->
-  <svg class="layer-3" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-    <path d="M-50,130 Q400,50 700,140 T1200,80 T1250,190" stroke="rgba(120,130,190,0.25)" stroke-width="1" fill="none"/>
-    <path d="M-50,210 Q450,130 750,220 T1250,150 T1250,270" stroke="rgba(120,130,190,0.2)" stroke-width="0.9" fill="none"/>
-    <path d="M-50,290 Q500,210 800,300 T1250,230 T1250,350" stroke="rgba(120,130,190,0.16)" stroke-width="0.8" fill="none"/>
-    <path d="M-50,390 Q550,300 850,390 T1250,320 T1250,450" stroke="rgba(120,130,190,0.13)" stroke-width="0.7" fill="none"/>
-    <path d="M-50,510 Q600,400 900,510 T1250,430 T1250,570" stroke="rgba(120,130,190,0.1)" stroke-width="0.7" fill="none"/>
-    <path d="M300,-50 Q270,200 330,400 T290,850" stroke="rgba(120,130,190,0.12)" stroke-width="0.8" fill="none"/>
-    <path d="M650,-50 Q620,200 680,400 T640,850" stroke="rgba(120,130,190,0.1)" stroke-width="0.7" fill="none"/>
-    <path d="M1000,-50 Q970,200 1030,400 T990,850" stroke="rgba(120,130,190,0.08)" stroke-width="0.6" fill="none"/>
-    <!-- Small blocks -->
-    <rect x="380" y="260" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.15)" stroke-width="0.6" fill="none"/>
-    <rect x="580" y="160" width="30" height="30" rx="1" stroke="rgba(120,130,190,0.12)" stroke-width="0.6" fill="none"/>
-    <rect x="820" y="340" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.13)" stroke-width="0.6" fill="none"/>
-    <rect x="250" y="420" width="30" height="30" rx="1" stroke="rgba(120,130,190,0.11)" stroke-width="0.6" fill="none"/>
-    <rect x="1080" y="280" width="30" height="30" rx="1" stroke="rgba(120,130,190,0.1)" stroke-width="0.5" fill="none"/>
-  </svg>
+    <svg class="t2" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+      <path d="M-50,100 Q300,20 600,120 T1100,60 T1250,160" stroke="rgba(100,110,180,0.22)" stroke-width="1" fill="none"/>
+      <path d="M-50,180 Q350,100 650,190 T1150,130 T1250,240" stroke="rgba(100,110,180,0.18)" stroke-width="0.9" fill="none"/>
+      <path d="M-50,260 Q400,170 700,270 T1200,200 T1250,320" stroke="rgba(100,110,180,0.14)" stroke-width="0.8" fill="none"/>
+      <path d="M-50,360 Q450,260 750,370 T1250,280 T1250,420" stroke="rgba(100,110,180,0.11)" stroke-width="0.7" fill="none"/>
+      <path d="M220,-50 Q190,200 250,400 T210,850" stroke="rgba(100,110,180,0.12)" stroke-width="0.8" fill="none"/>
+      <path d="M480,-50 Q450,200 510,400 T470,850" stroke="rgba(100,110,180,0.1)" stroke-width="0.7" fill="none"/>
+      <rect x="150" y="220" width="45" height="45" rx="1" stroke="rgba(100,110,180,0.14)" stroke-width="0.6" fill="none"/>
+      <rect x="520" y="380" width="55" height="55" rx="1" stroke="rgba(100,110,180,0.12)" stroke-width="0.6" fill="none"/>
+      <rect x="720" y="200" width="40" height="40" rx="1" stroke="rgba(100,110,180,0.1)" stroke-width="0.5" fill="none"/>
+    </svg>
 
-  <!-- Layer 4: city lights -->
-  <svg class="layer-4" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-    <!-- Warm lights -->
-    <circle cx="310" cy="210" r="2" fill="#d4a843" class="pulse-dot"/>
-    <circle cx="660" cy="320" r="2" fill="#d4a843" class="pulse-dot d2"/>
-    <circle cx="875" cy="175" r="2" fill="#d4a843" class="pulse-dot d3"/>
-    <circle cx="455" cy="485" r="2" fill="#d4a843" class="pulse-dot"/>
-    <circle cx="210" cy="547" r="2" fill="#d4a843" class="pulse-dot d2"/>
-    <circle cx="785" cy="512" r="2" fill="#d4a843" class="pulse-dot d3"/>
-    <circle cx="170" cy="242" r="2" fill="#d4a843" class="pulse-dot"/>
-    <circle cx="545" cy="407" r="2" fill="#d4a843" class="pulse-dot d2"/>
-    <circle cx="740" cy="220" r="2" fill="#d4a843" class="pulse-dot d3"/>
-    <circle cx="345" cy="545" r="2" fill="#d4a843" class="pulse-dot"/>
-    <circle cx="1000" cy="442" r="2" fill="#d4a843" class="pulse-dot d2"/>
-    <circle cx="400" cy="278" r="2" fill="#d4a843" class="pulse-dot d3"/>
-    <circle cx="595" cy="175" r="2" fill="#d4a843" class="pulse-dot"/>
-    <circle cx="840" cy="357" r="2" fill="#d4a843" class="pulse-dot d2"/>
-    <circle cx="265" cy="435" r="2" fill="#d4a843" class="pulse-dot d3"/>
-    <!-- Cool lights -->
-    <circle cx="350" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-    <circle cx="700" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
-    <circle cx="900" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
-    <circle cx="500" cy="470" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-    <circle cx="200" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
-    <circle cx="800" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
-    <circle cx="600" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-    <circle cx="400" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
-    <circle cx="1100" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
-    <circle cx="300" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-    <circle cx="1000" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
-    <circle cx="500" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
-    <circle cx="750" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-  </svg>
+    <svg class="t3" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+      <path d="M-50,130 Q400,50 700,140 T1200,80 T1250,190" stroke="rgba(120,130,190,0.18)" stroke-width="0.9" fill="none"/>
+      <path d="M-50,210 Q450,130 750,220 T1250,150 T1250,270" stroke="rgba(120,130,190,0.14)" stroke-width="0.8" fill="none"/>
+      <path d="M-50,290 Q500,210 800,300 T1250,230 T1250,350" stroke="rgba(120,130,190,0.11)" stroke-width="0.7" fill="none"/>
+      <path d="M300,-50 Q270,200 330,400 T290,850" stroke="rgba(120,130,190,0.1)" stroke-width="0.7" fill="none"/>
+      <path d="M650,-50 Q620,200 680,400 T640,850" stroke="rgba(120,130,190,0.08)" stroke-width="0.6" fill="none"/>
+      <rect x="380" y="260" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.1)" stroke-width="0.5" fill="none"/>
+      <rect x="580" y="160" width="30" height="30" rx="1" stroke="rgba(120,130,190,0.08)" stroke-width="0.5" fill="none"/>
+      <rect x="820" y="340" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.09)" stroke-width="0.5" fill="none"/>
+    </svg>
+
+    <!-- City lights -->
+    <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
+      <circle cx="310" cy="210" r="2" fill="#d4a843" class="pulse-dot"/>
+      <circle cx="660" cy="320" r="2" fill="#d4a843" class="pulse-dot d2"/>
+      <circle cx="875" cy="175" r="2" fill="#d4a843" class="pulse-dot d3"/>
+      <circle cx="455" cy="485" r="2" fill="#d4a843" class="pulse-dot"/>
+      <circle cx="210" cy="547" r="2" fill="#d4a843" class="pulse-dot d2"/>
+      <circle cx="785" cy="512" r="2" fill="#d4a843" class="pulse-dot d3"/>
+      <circle cx="170" cy="242" r="2" fill="#d4a843" class="pulse-dot"/>
+      <circle cx="545" cy="407" r="2" fill="#d4a843" class="pulse-dot d2"/>
+      <circle cx="740" cy="220" r="2" fill="#d4a843" class="pulse-dot d3"/>
+      <circle cx="345" cy="545" r="2" fill="#d4a843" class="pulse-dot"/>
+      <circle cx="1000" cy="442" r="2" fill="#d4a843" class="pulse-dot d2"/>
+      <circle cx="400" cy="278" r="2" fill="#d4a843" class="pulse-dot d3"/>
+      <circle cx="595" cy="175" r="2" fill="#d4a843" class="pulse-dot"/>
+      <circle cx="840" cy="357" r="2" fill="#d4a843" class="pulse-dot d2"/>
+      <circle cx="265" cy="435" r="2" fill="#d4a843" class="pulse-dot d3"/>
+      <circle cx="350" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+      <circle cx="700" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
+      <circle cx="900" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
+      <circle cx="500" cy="470" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+      <circle cx="200" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
+      <circle cx="800" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
+      <circle cx="600" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+      <circle cx="400" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
+      <circle cx="1100" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
+      <circle cx="300" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+      <circle cx="1000" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
+      <circle cx="500" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
+      <circle cx="750" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
+    </svg>
+  </div>
+
+  <div class="bg-vignette"></div>
 </div>
 
 <div class="page">
   <header>
+    <div class="avatar-wrap">
+      <img src="assets/mg-monogram.png" alt="Maks Gorin" onerror="this.style.display='none'">
+    </div>
     <h1>Maks Gorin</h1>
     <p>Montréal</p>
   </header>
@@ -463,7 +483,8 @@
         <div class="book-3d">
           <div class="book-spine janus">
             <div class="spine-shine"></div>
-            <i class="fa-solid fa-briefcase spine-icon"></i>
+            <img src="assets/janus-logo-icon.png" alt="Janus" class="spine-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <i class="fa-solid fa-briefcase spine-icon" style="display:none"></i>
             <span class="spine-title">Studio</span>
           </div>
           <div class="book-pages-right"></div>
