@@ -6,330 +6,415 @@
 <title>Maks Gorin — Links</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="icon" href="assets/janus-logo-icon.png" type="image/png">
 <style>
   :root{
-    --dock-bg: rgba(255,255,255,0.14);
-    --dock-border: rgba(255,255,255,0.28);
-    --text: #f5f5f7;
-    --muted: rgba(245,245,247,0.72);
+    --text:#f2f1ee;
+    --muted: rgba(242,241,238,0.6);
+    --card: rgba(255,255,255,0.07);
+    --card-border: rgba(255,255,255,0.14);
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
   html,body{
     margin:0; padding:0;
-    height:100%;
-    font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+    background:#05050a;
     color: var(--text);
+    font-family:'Inter', -apple-system, sans-serif;
     overflow-x:hidden;
   }
-  .desktop{
-    position:relative;
-    min-height:100vh;
-    min-height:100dvh;
-    background: url('assets/bg.jpg') center 62% / cover no-repeat;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-  }
-  .desktop::before{
-    content:'';
-    position:absolute; inset:0;
-    background:
-      linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 16%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.72) 100%);
-    pointer-events:none;
-  }
 
-  /* --- macOS menu bar --- */
-  .menubar{
-    position:relative;
-    z-index:2;
+  /* ---------- space background ---------- */
+  .space{ position:fixed; inset:0; z-index:0; overflow:hidden;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(90,60,160,0.35), transparent 55%),
+      radial-gradient(ellipse at 85% 25%, rgba(30,90,160,0.28), transparent 50%),
+      radial-gradient(ellipse at 50% 90%, rgba(120,40,110,0.22), transparent 55%),
+      #05050a;
+  }
+  .nebula{ position:absolute; width:60vw; height:60vw; border-radius:50%; filter:blur(70px); opacity:0.5; animation:drift 26s ease-in-out infinite; }
+  .nebula.n1{ background:#3a2a7a; top:-10%; left:-15%; }
+  .nebula.n2{ background:#1f4d73; bottom:-15%; right:-10%; animation-delay:-9s; }
+  @keyframes drift{ 0%,100%{ transform:translate(0,0) scale(1);} 50%{ transform:translate(4%,3%) scale(1.06);} }
+  .stars{ position:absolute; inset:0; }
+  .star{ position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; animation:twinkle 3.5s ease-in-out infinite; }
+  @keyframes twinkle{ 0%,100%{ opacity:0.15;} 50%{ opacity:1;} }
+
+  /* ---------- layout ---------- */
+  .page{ position:relative; z-index:1; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; }
+  header{ text-align:center; padding: max(48px, env(safe-area-inset-top) + 30px) 20px 6px; }
+  header h1{ margin:0; font-family:'Fraunces',serif; font-weight:600; font-size:clamp(26px,7vw,36px); letter-spacing:-0.01em; }
+  header p{ margin:8px 0 0; font-size:13px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; }
+  .hint{ text-align:center; font-size:11.5px; color:var(--muted); margin: 6px 0 0; letter-spacing:0.02em; }
+
+  /* ---------- coverflow shelf ---------- */
+  .shelf{
+    flex:1;
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    padding: 10px 18px;
-    padding-top: max(10px, env(safe-area-inset-top));
-    background: rgba(20,20,22,0.35);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    font-size: 13px;
-    font-weight: 500;
+    overflow-x:auto;
+    overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    perspective:1100px;
+    margin-top: 6vh;
+    scrollbar-width:none;
   }
-  .menubar .left{ display:flex; align-items:center; gap:14px; }
-  .menubar .appname{ font-weight:600; letter-spacing:0.01em; }
-  .menubar .right{ display:flex; align-items:center; gap:12px; opacity:0.9; }
-  .menubar .right svg.battery-icon{ height:13px; width:auto; display:block; }
-  .menubar-logo{
-    height: 15px;
-    width: auto;
-    display: block;
-    object-fit: contain;
-  }
-  .clock{ font-variant-numeric: tabular-nums; }
-
-  /* --- centered identity --- */
-  .identity{
-    position:relative;
-    z-index:2;
-    text-align:center;
-    padding: 0 20px;
-    margin-top: 14vh;
-  }
-  .identity h1{
-    margin:0;
-    font-size: clamp(30px, 8vw, 44px);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    text-shadow: 0 2px 24px rgba(0,0,0,0.4);
-  }
-  .identity p{
-    margin: 8px 0 0;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--muted);
-    letter-spacing: 0.02em;
-  }
-
-  /* --- dock --- */
-  .dock-wrap{
-    position:relative;
-    z-index:2;
-    display:flex;
-    justify-content:center;
-    padding: 0 16px max(22px, env(safe-area-inset-bottom));
-  }
-  .dock{
+  .shelf::-webkit-scrollbar{ display:none; }
+  .shelf-track{
     display:flex;
     align-items:flex-end;
-    gap: 20px;
-    padding: 14px 20px;
-    background: var(--dock-bg);
-    border: 1px solid var(--dock-border);
-    border-radius: 26px;
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    gap: 30px;
+    padding: 30px calc(50% - 65px) 44px;
   }
-  .app{
+  .cover-card{
+    flex-shrink:0;
+    width:130px;
+    scroll-snap-align:center;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:7px;
+    gap:12px;
     text-decoration:none;
     color:var(--text);
-    background:none;
-    border:none;
     cursor:pointer;
-    -webkit-user-select:none;
-    user-select:none;
+    transform-style:preserve-3d;
+    will-change: transform;
+    transition: transform 0.05s linear;
   }
-  .icon{
-    width: 62px;
-    height: 62px;
-    border-radius: 16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    transition: transform 0.18s cubic-bezier(.2,1.4,.4,1), box-shadow 0.18s ease;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  .cover{
+    width:130px;
+    height:172px;
+    border-radius:10px;
     position:relative;
+    overflow:hidden;
+    box-shadow: 0 18px 34px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.35);
+    display:flex; align-items:center; justify-content:center;
   }
-  .icon::after{
-    content:'';
+  .cover .pages{ position:absolute; top:0; right:0; bottom:0; width:12px;
+    background: repeating-linear-gradient(180deg, rgba(255,255,255,0.55) 0px, rgba(255,255,255,0.55) 1px, rgba(255,255,255,0.15) 1px, rgba(255,255,255,0.15) 3px); }
+  .cover.janus{ background:#eeece4; } .cover.janus img{ width:46%; height:46%; object-fit:contain; }
+  .cover.youtube{ background:linear-gradient(160deg,#ff3b3b,#b30f0f); } .cover.youtube i{ color:#fff; font-size:30px; margin-left:3px; }
+  .cover.tiktok{ background:#0c0c0c; } .cover.tiktok i{ font-size:30px; background:linear-gradient(135deg,#25f4ee,#fe2c55); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .cover.quotes{ background:linear-gradient(160deg,#2a2350,#0f0c22); } .cover.quotes i{ font-size:28px; color:#d8b466; }
+
+  .label{ text-align:center; transition: opacity 0.15s linear; }
+  .label .t{ font-size:14px; font-weight:600; display:block; }
+  .label .s{ font-size:11px; color:var(--muted); display:block; margin-top:2px; }
+
+  /* ---------- open book modal ---------- */
+  .backdrop{
+    position:fixed; inset:0; background:rgba(2,2,6,0.7);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    opacity:0; pointer-events:none; transition: opacity 0.4s ease;
+    z-index:9;
+  }
+  .backdrop.show{ opacity:1; pointer-events:auto; }
+
+  .open-book{
+    position:fixed;
+    background:linear-gradient(160deg,#221c40,#0f0c22);
+    border-radius:14px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    z-index:10;
+    display:none;
+    overflow:hidden;
+  }
+  .open-book.visible{ display:block; }
+  .open-book.animating{ transition: transform 0.55s cubic-bezier(.2,.9,.25,1); }
+
+  .book-close{
+    position:absolute; top:14px; right:14px;
+    width:30px; height:30px; border-radius:50%;
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18);
+    color:var(--text); display:flex; align-items:center; justify-content:center;
+    font-size:13px; cursor:pointer; opacity:0; transition: opacity 0.3s ease 0.3s;
+  }
+  .open-book.opened .book-close{ opacity:1; }
+
+  .page-inner{
     position:absolute; inset:0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 45%);
-    pointer-events:none;
-  }
-  .app:hover .icon, .app:focus-visible .icon{
-    transform: translateY(-10px) scale(1.08);
-    box-shadow: 0 16px 26px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-  }
-  .app:active .icon{ transform: translateY(-4px) scale(1.02); }
-
-  .icon.janus{
-    background: rgba(255,255,255,0.22);
-    backdrop-filter: blur(22px) saturate(190%);
-    -webkit-backdrop-filter: blur(22px) saturate(190%);
-    border: 1px solid rgba(255,255,255,0.38);
-    box-shadow:
-      0 6px 14px rgba(0,0,0,0.28),
-      inset 0 1px 0 rgba(255,255,255,0.55),
-      inset 0 -1px 0 rgba(255,255,255,0.12);
-  }
-  .icon.janus img{ width:88%; height:88%; object-fit:contain; object-position:center; }
-
-  .icon.youtube{ background: linear-gradient(180deg, #ff2f2f, #d40f0f); }
-  .icon.youtube i{ font-size: 26px; color:#fff; margin-left:2px; }
-
-  .icon.tiktok{ background: #0a0a0a; }
-  .icon.tiktok i{ font-size: 26px; background: linear-gradient(135deg, #25f4ee, #fe2c55); -webkit-background-clip:text; background-clip:text; color:transparent; }
-
-  .label{
-    font-size: 11.5px;
-    font-weight: 500;
-    color: var(--muted);
-    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
-    white-space:nowrap;
-  }
-
-  .toast{
-    position: fixed;
-    left: 50%;
-    bottom: 128px;
-    transform: translate(-50%, 12px);
-    background: rgba(30,30,32,0.85);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: var(--text);
-    padding: 11px 16px;
-    border-radius: 10px;
-    font-size: 12.5px;
-    max-width: 88%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding: 40px 30px;
     text-align:center;
-    opacity: 0;
-    pointer-events:none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    backdrop-filter: blur(12px);
-    z-index: 5;
+    opacity:0;
+    transform: rotateY(0deg);
+    transform-origin: left center;
+    transition: opacity 0.35s ease, transform 0.35s ease;
   }
-  .toast.show{ opacity: 1; transform: translate(-50%, 0); }
+  .open-book.opened .page-inner{ opacity:1; }
+  .page-inner.turning{ transform: rotateY(-92deg); opacity:0.2; }
 
-  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+  .page-inner i.quill{ color:#d8b466; font-size:16px; opacity:0.85; margin-bottom:18px; }
+  .quote-text{ font-family:'Fraunces',serif; font-style:italic; font-size:19px; line-height:1.55; }
+  .quote-by{ margin-top:16px; font-size:12px; letter-spacing:0.04em; color:var(--muted); text-transform:uppercase; }
+  .quote-tap{ margin-top:26px; font-size:10.5px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase; display:flex; align-items:center; gap:6px; }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important; } }
 </style>
 </head>
 <body>
 
-<div class="desktop">
+<div class="space">
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="stars" id="stars"></div>
+</div>
 
-  <div class="menubar">
-    <div class="left">
-      <span class="appname">Maks Gorin</span>
-    </div>
-    <div class="right">
-      <img class="menubar-logo" src="assets/mg-monogram.png" width="15" height="30" alt="">
-      <svg class="battery-icon" viewBox="0 0 28 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1.5" width="22" height="11" rx="2.5" stroke="white" stroke-width="1.3"/><rect x="3" y="3.5" width="14" height="7" rx="1" fill="white"/><rect x="24.5" y="4.5" width="2" height="5" rx="1" fill="white"/></svg>
-      <span class="clock" id="clock">--:--</span>
-    </div>
-  </div>
-
-  <div class="identity">
+<div class="page">
+  <header>
     <h1>Maks Gorin</h1>
     <p>Montréal</p>
-  </div>
+  </header>
+  <p class="hint">Scroll the shelf · tap a book</p>
 
-  <div class="dock-wrap">
-    <div class="dock">
+  <div class="shelf" id="shelf">
+    <div class="shelf-track" id="shelfTrack">
 
-      <a class="app" href="https://januslabsco.com" data-web="https://januslabsco.com">
-        <span class="icon janus"><img src="assets/janus-logo-icon.png" alt="Janus Labs Co."></span>
-        <span class="label">Studio</span>
+      <a class="cover-card" data-type="link" href="https://januslabsco.com" data-web="https://januslabsco.com">
+        <div class="cover janus"><img src="assets/janus-logo-icon.png" alt=""><div class="pages"></div></div>
+        <div class="label"><span class="t">Studio</span><span class="s">januslabsco.com</span></div>
       </a>
 
-      <a class="app"
+      <a class="cover-card" data-type="link"
          href="https://www.youtube.com/@maksgorin2687"
          data-web="https://www.youtube.com/@maksgorin2687"
          data-ios="youtube://www.youtube.com/@maksgorin2687"
          data-android-package="com.google.android.youtube">
-        <span class="icon youtube"><i class="fa-solid fa-play"></i></span>
-        <span class="label">YouTube</span>
+        <div class="cover youtube"><i class="fa-solid fa-play"></i><div class="pages"></div></div>
+        <div class="label"><span class="t">YouTube</span><span class="s">@maksgorin2687</span></div>
       </a>
 
-      <a class="app"
+      <a class="cover-card" data-type="link"
          href="https://www.tiktok.com/@maksgorin1"
          data-web="https://www.tiktok.com/@maksgorin1"
          data-android-package="com.zhiliaoapp.musically">
-        <span class="icon tiktok"><i class="fa-brands fa-tiktok"></i></span>
-        <span class="label">TikTok</span>
+        <div class="cover tiktok"><i class="fa-brands fa-tiktok"></i><div class="pages"></div></div>
+        <div class="label"><span class="t">TikTok</span><span class="s">@maksgorin1</span></div>
       </a>
+
+      <div class="cover-card" data-type="quotes" id="quoteBook">
+        <div class="cover quotes"><i class="fa-solid fa-feather"></i><div class="pages"></div></div>
+        <div class="label"><span class="t">Quotes</span><span class="s">tap to open</span></div>
+      </div>
 
     </div>
   </div>
-
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="backdrop" id="backdrop"></div>
+<div class="open-book" id="openBook">
+  <div class="book-close" id="bookClose"><i class="fa-solid fa-xmark"></i></div>
+  <div class="page-inner" id="pageInner">
+    <i class="fa-solid fa-quote-left quill"></i>
+    <div class="quote-text" id="quoteText"></div>
+    <div class="quote-by" id="quoteBy"></div>
+    <div class="quote-tap"><i class="fa-solid fa-hand-pointer"></i> Tap to turn the page</div>
+  </div>
+</div>
 
 <script>
 (function(){
-  var clockEl = document.getElementById('clock');
-  var tz = 'America/Toronto';
-
-  function updateClock(){
-    if (!clockEl) return;
-    var parts = new Intl.DateTimeFormat('en-US', {
-      timeZone: tz,
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    }).formatToParts(new Date());
-    var hour = '';
-    var minute = '';
-    var dayPeriod = '';
-    parts.forEach(function(part){
-      if (part.type === 'hour') hour = part.value;
-      if (part.type === 'minute') minute = part.value;
-      if (part.type === 'dayPeriod') dayPeriod = part.value;
-    });
-    clockEl.textContent = hour + ':' + minute + ' ' + dayPeriod;
+  // starfield
+  var starsEl = document.getElementById('stars');
+  var frag = document.createDocumentFragment();
+  for (var i=0;i<70;i++){
+    var s=document.createElement('div'); s.className='star';
+    s.style.left=(Math.random()*100)+'%'; s.style.top=(Math.random()*100)+'%';
+    s.style.animationDelay=(Math.random()*3.5)+'s';
+    var size=Math.random()*1.6+1; s.style.width=size+'px'; s.style.height=size+'px';
+    frag.appendChild(s);
   }
+  starsEl.appendChild(frag);
 
-  updateClock();
-  var msToNextMinute = 60000 - (Date.now() % 60000);
-  setTimeout(function(){
-    updateClock();
-    setInterval(updateClock, 60000);
-  }, msToNextMinute);
+  // ---------- coverflow ----------
+  var shelf = document.getElementById('shelf');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.cover-card'));
+  var ticking = false;
 
+  function updateCoverflow(){
+    var rect = shelf.getBoundingClientRect();
+    var centerX = rect.left + rect.width/2;
+    cards.forEach(function(card){
+      var cRect = card.getBoundingClientRect();
+      var cCenter = cRect.left + cRect.width/2;
+      var delta = (cCenter - centerX) / (rect.width/2);
+      var clamped = Math.max(-1.3, Math.min(1.3, delta));
+      var rotateY = -clamped*30;
+      var scale = 1 - Math.min(Math.abs(clamped),1)*0.24;
+      var bright = 1 - Math.min(Math.abs(clamped),1)*0.4;
+      card.style.transform = 'rotateY('+rotateY+'deg) scale('+scale+')';
+      card.style.zIndex = Math.round((1-Math.abs(clamped))*100);
+      card.querySelector('.cover').style.filter = 'brightness('+bright+')';
+      card.querySelector('.label').style.opacity = 1 - Math.min(Math.abs(clamped),1)*0.75;
+    });
+    ticking = false;
+  }
+  function onScroll(){
+    if (!ticking){ requestAnimationFrame(updateCoverflow); ticking = true; }
+  }
+  shelf.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', updateCoverflow);
+  updateCoverflow();
+
+  // ---------- app-first redirect for link books ----------
   var isAndroid = /android/i.test(navigator.userAgent);
   var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  var toast = document.getElementById('toast');
-  var toastTimer;
 
-  function showToast(msg){
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
-  }
-
-  document.querySelectorAll('.app').forEach(function(row){
+  cards.filter(function(c){ return c.dataset.type==='link'; }).forEach(function(row){
     row.addEventListener('click', function(e){
       var webUrl = row.getAttribute('data-web');
       var iosScheme = row.getAttribute('data-ios');
       var androidPkg = row.getAttribute('data-android-package');
-
-      if (!iosScheme && !androidPkg){ return; } // plain link, let it navigate normally
-
+      if (!iosScheme && !androidPkg){ return; }
       e.preventDefault();
-
       if (isAndroid && androidPkg){
-        var bare = webUrl.replace(/^https?:\/\//, '');
-        var intentUrl = 'intent://' + bare +
-          '#Intent;scheme=https;package=' + androidPkg +
-          ';S.browser_fallback_url=' + encodeURIComponent(webUrl) + ';end';
-        window.location.href = intentUrl;
+        var bare = webUrl.replace(/^https?:\/\//,'');
+        window.location.href = 'intent://'+bare+'#Intent;scheme=https;package='+androidPkg+';S.browser_fallback_url='+encodeURIComponent(webUrl)+';end';
         return;
       }
-
       if (isIOS && iosScheme){
-        var didHide = false;
-        var onHide = function(){ didHide = true; };
-        document.addEventListener('visibilitychange', onHide, { once: true });
+        var didHide=false;
+        var onHide=function(){ didHide=true; };
+        document.addEventListener('visibilitychange', onHide, { once:true });
         window.location.href = iosScheme;
         setTimeout(function(){
           document.removeEventListener('visibilitychange', onHide);
-          if (!didHide){
-            showToast("Couldn't open the app — continuing in browser.");
-            window.location.href = webUrl;
-          }
+          if (!didHide){ window.location.href = webUrl; }
         }, 900);
         return;
       }
-
       window.location.href = webUrl;
     });
+  });
+
+  // ---------- quote book: open / turn page / close ----------
+  var quotes = [
+    { q:"You have power over your mind, not outside events.", by:"Marcus Aurelius" },
+    { q:"Waste no more time arguing what a good man should be. Be one.", by:"Marcus Aurelius" },
+    { q:"It is not that we have a short time to live, but that we waste a lot of it.", by:"Seneca" },
+    { q:"It's not what happens to you, but how you react that matters.", by:"Epictetus" },
+    { q:"Our greatest glory is not in never falling, but in rising every time we fall.", by:"Confucius" },
+    { q:"The man who moves a mountain begins by carrying away small stones.", by:"Confucius" },
+    { q:"A journey of a thousand miles begins with a single step.", by:"Lao Tzu" },
+    { q:"In the midst of chaos, there is also opportunity.", by:"Sun Tzu" },
+    { q:"Whatever you are, be a good one.", by:"Abraham Lincoln" },
+    { q:"By failing to prepare, you are preparing to fail.", by:"Benjamin Franklin" },
+    { q:"Well done is better than well said.", by:"Benjamin Franklin" },
+    { q:"Knowing yourself is the beginning of all wisdom.", by:"Aristotle" },
+    { q:"The only true wisdom is in knowing you know nothing.", by:"Socrates" },
+    { q:"Simplicity is the ultimate sophistication.", by:"Leonardo da Vinci" },
+    { q:"The lamp that guides a sailor home burns brightest in the dark.", by:"an old ship captain's log" },
+    { q:"A garden grown in silence still feeds the whole village.", by:"anonymous, attrib. folk proverb" }
+  ];
+  var lastIndex = -1;
+  function pickQuote(){
+    var idx; do { idx = Math.floor(Math.random()*quotes.length); } while (idx===lastIndex && quotes.length>1);
+    lastIndex = idx; return quotes[idx];
+  }
+
+  var quoteBook = document.getElementById('quoteBook');
+  var backdrop = document.getElementById('backdrop');
+  var openBook = document.getElementById('openBook');
+  var pageInner = document.getElementById('pageInner');
+  var quoteText = document.getElementById('quoteText');
+  var quoteBy = document.getElementById('quoteBy');
+  var bookClose = document.getElementById('bookClose');
+  var isOpen = false;
+
+  function setQuoteContent(){
+    var q = pickQuote();
+    quoteText.textContent = '"' + q.q + '"';
+    quoteBy.textContent = q.by;
+  }
+
+  function openTheBook(){
+    var startRect = quoteBook.querySelector('.cover').getBoundingClientRect();
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var targetW = Math.min(340, vw*0.86);
+    var targetH = Math.min(440, vh*0.72);
+    var targetLeft = (vw - targetW)/2;
+    var targetTop = (vh - targetH)/2;
+
+    openBook.style.left = targetLeft+'px';
+    openBook.style.top = targetTop+'px';
+    openBook.style.width = targetW+'px';
+    openBook.style.height = targetH+'px';
+    openBook.classList.add('visible');
+    openBook.classList.remove('opened');
+
+    var dx = (startRect.left + startRect.width/2) - (targetLeft + targetW/2);
+    var dy = (startRect.top + startRect.height/2) - (targetTop + targetH/2);
+    var sx = startRect.width / targetW;
+    var sy = startRect.height / targetH;
+
+    openBook.style.transition = 'none';
+    openBook.style.transform = 'translate('+dx+'px,'+dy+'px) scale('+sx+','+sy+')';
+    // force reflow
+    openBook.offsetHeight;
+
+    backdrop.classList.add('show');
+    requestAnimationFrame(function(){
+      openBook.classList.add('animating');
+      openBook.style.transform = 'none';
+    });
+
+    setQuoteContent();
+
+    var onEnd = function(e){
+      if (e.propertyName !== 'transform') return;
+      openBook.removeEventListener('transitionend', onEnd);
+      openBook.classList.add('opened');
+      isOpen = true;
+    };
+    openBook.addEventListener('transitionend', onEnd);
+  }
+
+  function closeTheBook(){
+    var startRect = quoteBook.querySelector('.cover').getBoundingClientRect();
+    var currentRect = openBook.getBoundingClientRect();
+    var dx = (startRect.left + startRect.width/2) - (currentRect.left + currentRect.width/2);
+    var dy = (startRect.top + startRect.height/2) - (currentRect.top + currentRect.height/2);
+    var sx = startRect.width / currentRect.width;
+    var sy = startRect.height / currentRect.height;
+
+    openBook.classList.remove('opened');
+    backdrop.classList.remove('show');
+    openBook.style.transform = 'translate('+dx+'px,'+dy+'px) scale('+sx+','+sy+')';
+
+    var onEnd = function(e){
+      if (e.propertyName !== 'transform') return;
+      openBook.removeEventListener('transitionend', onEnd);
+      openBook.classList.remove('visible', 'animating');
+      openBook.style.transform = 'none';
+      isOpen = false;
+    };
+    openBook.addEventListener('transitionend', onEnd);
+  }
+
+  function turnPage(){
+    pageInner.classList.add('turning');
+    setTimeout(function(){
+      setQuoteContent();
+      pageInner.classList.remove('turning');
+    }, 190);
+  }
+
+  quoteBook.addEventListener('click', function(e){
+    e.stopPropagation();
+    if (!isOpen){ openTheBook(); }
+  });
+  openBook.addEventListener('click', function(e){
+    if (e.target === bookClose || bookClose.contains(e.target)) return;
+    if (isOpen){ turnPage(); }
+  });
+  bookClose.addEventListener('click', function(e){
+    e.stopPropagation();
+    closeTheBook();
+  });
+  backdrop.addEventListener('click', function(){
+    if (isOpen){ closeTheBook(); }
   });
 })();
 </script>
