@@ -3,569 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Maks Gorin — Links</title>
+<title>Maks Gorin — Index</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
   :root{
-    --text:#f0eeea;
-    --muted: rgba(240,238,234,0.55);
-    --card: rgba(255,255,255,0.06);
-    --card-border: rgba(255,255,255,0.12);
+    --ink:#0b0c0f;
+    --paper:#ece9e2;
+    --paper-dim: rgba(236,233,226,0.78);
+    --muted: rgba(236,233,226,0.42);
+    --line: rgba(236,233,226,0.10);
+    --signal:#37e28a;
+    --signal-ink:#06140d;
+    --serif:'Fraunces',serif;
+    --mono:'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
   }
-  *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{
     margin:0; padding:0;
-    background:#070714;
-    color: var(--text);
-    font-family:'Inter', -apple-system, sans-serif;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--mono);
     overflow-x:hidden;
     height:100%;
     -webkit-text-size-adjust:100%;
   }
 
   /* ---------- background ---------- */
-  .bg-wrap{
-    position:fixed; inset:0; z-index:0;
-    overflow:hidden;
-  }
-  .bg-wrap .bg-img{
+  .grid-bg{ position:fixed; inset:0; z-index:0; background:var(--ink); }
+  .grid-bg .glow{
     position:absolute; inset:0;
-    background: url('assets/bg.jpg') center/cover no-repeat;
-    transform: scale(1.08);
-    animation: bgDrift 30s ease-in-out infinite;
+    background: radial-gradient(circle at 50% 62%, rgba(55,226,138,0.14), transparent 55%);
   }
-  @keyframes bgDrift{
-    0%,100%{ transform: scale(1.08) translate(0,0); }
-    50%{ transform: scale(1.12) translate(-1%,-1%); }
-  }
-  .bg-wrap .bg-overlay{
+  .grid-bg .dots{
     position:absolute; inset:0;
-    background: rgba(7,7,20,0.72);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
+    background-image: radial-gradient(rgba(236,233,226,0.07) 1px, transparent 1px);
+    background-size: 25px 25px;
   }
-  .bg-wrap .bg-vignette{
+  .grid-bg .vignette{
     position:absolute; inset:0;
-    background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(7,7,20,0.9) 100%);
-  }
-
-  /* topo overlay */
-  .topo-layer{
-    position:absolute; inset:0;
-    opacity:0.35;
-    pointer-events:none;
-  }
-  .topo-layer svg{
-    position:absolute;
-    width:120%; height:120%;
-    left:-10%; top:-10%;
-  }
-  .topo-layer .t1{ animation: topoDrift 50s linear infinite; }
-  .topo-layer .t2{ animation: topoDrift 38s linear infinite reverse; opacity:0.5; }
-  .topo-layer .t3{ animation: topoDrift 28s linear infinite; opacity:0.3; }
-  @keyframes topoDrift{
-    0%{ transform: translate(0,0); }
-    50%{ transform: translate(3%,2%); }
-    100%{ transform: translate(0,0); }
-  }
-  .pulse-dot{
-    animation: pulseLight 4s ease-in-out infinite;
-  }
-  .pulse-dot.d2{ animation-delay:-1.3s; }
-  .pulse-dot.d3{ animation-delay:-2.6s; }
-  @keyframes pulseLight{
-    0%,100%{ opacity:0.1; r:1.2; }
-    50%{ opacity:0.8; r:2.8; }
+    background: radial-gradient(ellipse at 50% 40%, transparent 45%, rgba(0,0,0,0.65) 100%);
   }
 
   /* ---------- layout ---------- */
   .page{ position:relative; z-index:1; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; }
-  header{ text-align:center; padding: max(48px, env(safe-area-inset-top) + 32px) 20px 8px; }
+  header{ text-align:center; padding: max(52px, env(safe-area-inset-top) + 36px) 20px 0; }
+  .eyebrow{ margin:0; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); }
+  h1{ margin:8px 0 0; font-family:var(--serif); font-weight:600; font-size:clamp(26px,7vw,38px); letter-spacing:-0.01em; color:var(--paper); }
+  .hint{ margin:10px 0 0; text-align:center; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
 
-  /* Avatar */
-  .avatar-wrap{
-    position:relative;
-    width:68px; height:68px;
-    margin:0 auto 12px;
-    border-radius:50%;
-    padding:2.5px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05));
+  /* ---------- chip ---------- */
+  .chip{
+    width:fit-content; max-width:82vw;
+    margin: 18px auto 0;
+    display:flex; align-items:center; gap:10px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding: 9px 14px;
+    opacity:0; animation: fadeUp 0.6s ease 0.5s forwards;
   }
-  .avatar-wrap img{
-    width:100%; height:100%;
-    border-radius:50%;
-    object-fit:cover;
-    object-position:center;
-    display:block;
-    background:#111;
-  }
+  .chip-text{ display:flex; flex-direction:column; gap:2px; text-align:left; min-width:0; }
+  .chip-eyebrow{ font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); transition:opacity 0.15s ease; white-space:nowrap; }
+  .chip-title{ font-family:var(--serif); font-size:14px; color:var(--paper); transition:opacity 0.15s ease; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .chip i{ color:var(--signal); font-size:11px; flex-shrink:0; }
 
-  header h1{ margin:0; font-family:'Fraunces',serif; font-weight:600; font-size:clamp(24px,6.5vw,36px); letter-spacing:-0.01em; }
-  header p{ margin:6px 0 0; font-size:12px; color:var(--muted); letter-spacing:0.04em; text-transform:uppercase; }
-  .hint{ text-align:center; font-size:11px; color:var(--muted); margin: 6px 0 0; letter-spacing:0.02em; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:translateY(0);} }
 
-  /* ---------- 3D carousel ---------- */
-  .carousel-wrap{
+  /* ---------- deck ---------- */
+  .deck-wrap{
     flex:1;
-    display:flex;
-    align-items:center;
-    overflow-x:auto;
-    overflow-y:visible;
+    display:flex; align-items:center;
+    overflow-x:auto; overflow-y:visible;
     scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;
-    perspective:1400px;
     scrollbar-width:none;
     touch-action:pan-x;
   }
-  .carousel-wrap::-webkit-scrollbar{ display:none; }
-  .carousel-track{
-    display:flex;
-    align-items:flex-end;
-    gap: 32px;
-    padding: 36px calc(50% - 64px) 50px;
+  .deck-wrap::-webkit-scrollbar{ display:none; }
+  .deck{
+    display:flex; align-items:center;
+    gap:22px;
+    padding: 30px calc(50% - 62px) 30px;
   }
 
-  .book-card{
+  .card{
+    --card-bg: var(--paper);
     flex-shrink:0;
-    width:128px;
+    width:124px; height:168px;
+    border-radius:13px;
+    background:var(--card-bg);
+    border:1px solid rgba(0,0,0,0.05);
+    display:flex; flex-direction:column;
+    padding:13px 12px;
+    text-decoration:none; color:var(--ink);
     scroll-snap-align:center;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-    text-decoration:none;
-    color:var(--text);
     cursor:pointer;
-    transform-style:preserve-3d;
-    will-change: transform;
-    transition: transform 0.05s linear;
+    position:relative;
+    box-shadow:0 16px 32px rgba(0,0,0,0.4);
+    transition: background 0.35s ease, box-shadow 0.35s ease;
+    will-change:transform;
     opacity:0;
-    animation: cardEnter 0.7s cubic-bezier(.2,.9,.25,1) forwards;
+    animation: cardIn 0.6s cubic-bezier(.2,.9,.25,1) forwards;
   }
-  .book-card:nth-child(1){ animation-delay:0.08s; }
-  .book-card:nth-child(2){ animation-delay:0.16s; }
-  .book-card:nth-child(3){ animation-delay:0.24s; }
-  .book-card:nth-child(4){ animation-delay:0.32s; }
+  .card:nth-child(1){ animation-delay:0.05s; }
+  .card:nth-child(2){ animation-delay:0.12s; }
+  .card:nth-child(3){ animation-delay:0.19s; }
+  .card:nth-child(4){ animation-delay:0.26s; }
+  @keyframes cardIn{ from{ opacity:0; transform:translateY(30px);} to{ opacity:1; transform:translateY(0);} }
 
-  @keyframes cardEnter{
-    from{ opacity:0; transform: translateY(40px) rotateY(-20deg); }
-    to{ opacity:1; transform: translateY(0) rotateY(0deg); }
+  .card::before{
+    content:''; position:absolute; top:-6px; left:14px;
+    width:32px; height:9px; border-radius:5px 5px 0 0;
+    background:var(--card-bg);
+    transition:background 0.35s ease;
   }
+  .card.active{ --card-bg: var(--signal); box-shadow:0 20px 44px rgba(55,226,138,0.32), 0 0 0 1px rgba(55,226,138,0.4); }
 
-  /* 3D book */
-  .book-3d{
-    position:relative;
-    width:128px;
-    height:174px;
-    transform-style:preserve-3d;
-    transform: rotateX(8deg);
-    transition: transform 0.4s cubic-bezier(.2,.9,.25,1);
-  }
-  .book-card:hover .book-3d, .book-card.active .book-3d{
-    transform: rotateX(4deg) translateZ(30px) translateY(-8px);
-  }
-
-  /* Spine */
-  .book-spine{
-    position:absolute;
-    inset:0;
-    border-radius: 3px 2px 2px 3px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    padding: 14px 8px;
-    transform: translateZ(10px);
-    box-shadow:
-      0 20px 40px rgba(0,0,0,0.55),
-      0 6px 12px rgba(0,0,0,0.4),
-      inset 0 1px 0 rgba(255,255,255,0.12);
-    overflow:hidden;
-  }
-  .book-spine::before{
-    content:'';
-    position:absolute;
-    left:0; top:0; bottom:0; width:3px;
-    background: rgba(255,255,255,0.25);
-    border-radius: 3px 0 0 3px;
-  }
-  .book-spine::after{
-    content:'';
-    position:absolute;
-    right:0; top:0; bottom:0; width:2px;
-    background: rgba(0,0,0,0.25);
-  }
-
-  .spine-shine{
-    position:absolute;
-    top:0; left:-60%; width:60%; height:100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transform: skewX(-18deg);
-    transition: left 0.7s ease;
-  }
-  .book-card:hover .spine-shine, .book-card.active .spine-shine{
-    left:130%;
-  }
-
-  .spine-icon{ font-size:26px; position:relative; z-index:1; }
-  .spine-icon-img{
-    width:40px; height:40px;
-    object-fit:contain;
-    object-position:center;
-    position:relative;
-    z-index:1;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    display:block;
-  }
-  .spine-title{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    font-size:13px;
-    letter-spacing:0.02em;
-    position:relative;
-    z-index:1;
-    text-align:center;
-  }
-
-  /* Colors */
-  .book-spine.janus{
-    background: linear-gradient(160deg, #f0ede5 0%, #e0dbd0 50%, #d4cfc2 100%);
-    color: #1a1a1a;
-  }
-  .book-spine.youtube{
-    background: linear-gradient(160deg, #ff4444 0%, #cc0000 50%, #8a0000 100%);
-    color: #fff;
-  }
-  .book-spine.tiktok{
-    background: linear-gradient(160deg, #1a1a1a 0%, #0c0c0c 50%, #000 100%);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  .book-spine.tiktok .spine-icon{
-    background: linear-gradient(135deg,#25f4ee,#fe2c55);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-  .book-spine.quotes{
-    background: linear-gradient(160deg, #2a2350 0%, #1a1535 50%, #0f0c22 100%);
-    color: #d8b466;
-    border: 1px solid rgba(216,180,102,0.18);
-  }
-
-  /* Pages right */
-  .book-pages-right{
-    position:absolute;
-    right: -8px;
-    top: 2px;
-    bottom: 2px;
-    width: 10px;
-    background: repeating-linear-gradient(
-      180deg,
-      rgba(235,230,215,0.9) 0px,
-      rgba(235,230,215,0.9) 1px,
-      rgba(195,185,165,0.6) 1px,
-      rgba(195,185,165,0.6) 3px
-    );
-    transform: rotateY(28deg) translateZ(-2px);
-    border-radius: 0 2px 2px 0;
-    box-shadow: inset -2px 0 4px rgba(0,0,0,0.2);
-  }
-  .book-pages-right::before{
-    content:'';
-    position:absolute;
-    right:0; top:0; bottom:0; width:1px;
-    background: rgba(0,0,0,0.25);
-  }
-
-  /* Pages top */
-  .book-pages-top{
-    position:absolute;
-    top: -6px;
-    left: 3px;
-    right: 3px;
-    height: 7px;
-    background: repeating-linear-gradient(
-      90deg,
-      rgba(235,230,215,0.85) 0px,
-      rgba(235,230,215,0.85) 1px,
-      rgba(195,185,165,0.5) 1px,
-      rgba(195,185,165,0.5) 3px
-    );
-    transform: rotateX(-55deg) translateZ(-1px);
-    border-radius: 2px 2px 0 0;
-    box-shadow: inset 0 2px 3px rgba(0,0,0,0.15);
-  }
-
-  /* Shadow */
-  .book-shadow{
-    position:absolute;
-    bottom: -16px;
-    left: 8%;
-    right: 8%;
-    height: 12px;
-    background: rgba(0,0,0,0.45);
-    border-radius: 50%;
-    filter: blur(10px);
-    transform: translateZ(-25px);
-    transition: all 0.4s ease;
-  }
-  .book-card:hover .book-shadow, .book-card.active .book-shadow{
-    bottom: -22px;
-    left: 2%;
-    right: 2%;
-    background: rgba(0,0,0,0.6);
-    filter: blur(14px);
-  }
-
-  /* Label */
-  .label{ text-align:center; transition: opacity 0.2s linear; }
-  .label .t{ font-size:13px; font-weight:600; display:block; }
-  .label .s{ font-size:10.5px; color:var(--muted); display:block; margin-top:2px; }
+  .card .idx{ font-size:9.5px; letter-spacing:0.05em; color:rgba(0,0,0,0.34); }
+  .card.active .idx{ color:rgba(6,20,13,0.5); }
+  .card .icon{ flex:1; display:flex; align-items:center; justify-content:center; font-size:24px; color:rgba(0,0,0,0.7); }
+  .card.active .icon{ color:var(--signal-ink); }
+  .card .icon.mono-j{ font-family:var(--serif); font-weight:600; font-size:30px; }
+  .card .label{ font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; text-align:center; color:rgba(0,0,0,0.58); }
+  .card.active .label{ color:rgba(6,20,13,0.62); }
 
   /* ---------- modal ---------- */
   .backdrop{
-    position:fixed; inset:0; background:rgba(2,2,8,0.78);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    opacity:0; pointer-events:none; transition: opacity 0.4s ease;
+    position:fixed; inset:0; background:rgba(2,2,6,0.7);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    opacity:0; pointer-events:none; transition:opacity 0.3s ease;
     z-index:9;
   }
   .backdrop.show{ opacity:1; pointer-events:auto; }
 
-  .open-book{
-    position:fixed;
-    background:linear-gradient(160deg,#1e1840,#0d0a1f);
-    border-radius:14px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
-    z-index:10;
-    display:none;
-    overflow:hidden;
-  }
-  .open-book.visible{ display:block; }
-  .open-book.animating{ transition: transform 0.55s cubic-bezier(.2,.9,.25,1); }
-
-  .book-close{
-    position:absolute; top:14px; right:14px;
-    width:32px; height:32px; border-radius:50%;
-    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18);
-    color:var(--text); display:flex; align-items:center; justify-content:center;
-    font-size:13px; cursor:pointer; opacity:0; transition: opacity 0.3s ease 0.3s, background 0.2s ease;
-    z-index:5;
-  }
-  .book-close:hover{ background:rgba(255,255,255,0.2); }
-  .open-book.opened .book-close{ opacity:1; }
-
-  .page-inner{
-    position:absolute; inset:0;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding: 40px 28px;
+  .modal{
+    position:fixed; top:50%; left:50%;
+    width:min(360px,86vw);
+    background:#121317;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:38px 26px 30px;
     text-align:center;
-    opacity:0;
-    transform: rotateY(0deg);
-    transform-origin: left center;
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    z-index:10;
+    opacity:0; pointer-events:none;
+    transform:translate(-50%,-50%) scale(0.94);
+    transition:opacity 0.3s ease, transform 0.3s ease;
   }
-  .open-book.opened .page-inner{ opacity:1; }
-  .page-inner.turning{ transform: rotateY(-92deg); opacity:0.2; }
+  .modal.show{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+  .modal-close{
+    position:absolute; top:12px; right:12px;
+    width:30px; height:30px; border-radius:50%;
+    background:rgba(255,255,255,0.06); border:1px solid var(--line);
+    color:var(--paper); display:flex; align-items:center; justify-content:center;
+    font-size:12px; cursor:pointer;
+  }
+  .modal-eyebrow{ margin:0; font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--signal); }
+  .modal-quote{ margin:16px 0 0; font-family:var(--serif); font-style:italic; font-size:19px; line-height:1.55; color:var(--paper); transition:opacity 0.18s ease; }
+  .modal-by{ margin:16px 0 0; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); transition:opacity 0.18s ease; }
+  .modal-tap{ margin:22px 0 0; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
 
-  .page-inner i.quill{ color:#d8b466; font-size:17px; opacity:0.85; margin-bottom:18px; }
-  .quote-text{ font-family:'Fraunces',serif; font-style:italic; font-size:18px; line-height:1.6; color:var(--text); }
-  .quote-by{ margin-top:16px; font-size:11px; letter-spacing:0.04em; color:var(--muted); text-transform:uppercase; }
-  .quote-tap{ margin-top:24px; font-size:10px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase; display:flex; align-items:center; gap:6px; }
+  a.card:focus-visible, .card:focus-visible, .modal-close:focus-visible{
+    outline:2px solid var(--signal); outline-offset:3px;
+  }
 
   /* ---------- responsive ---------- */
-  @media (min-width: 400px){
-    .book-card{ width:138px; gap:14px; }
-    .book-3d{ width:138px; height:188px; }
-    .book-spine{ gap:10px; padding: 16px 10px; }
-    .spine-icon{ font-size:28px; }
-    .spine-icon-img{ width:44px; height:44px; }
-    .spine-title{ font-size:14px; }
-    .book-pages-right{ width:12px; right:-9px; }
-    .book-pages-top{ height:8px; top:-7px; }
-    .book-shadow{ bottom:-18px; height:14px; }
-    .carousel-track{ gap:38px; padding: 40px calc(50% - 69px) 55px; }
-    .avatar-wrap{ width:72px; height:72px; }
-    .label .t{ font-size:14px; }
-    .label .s{ font-size:11px; }
-    .quote-text{ font-size:20px; }
-    .page-inner{ padding:44px 32px; }
+  @media (min-width:400px){
+    .card{ width:136px; height:182px; }
+    .card .icon{ font-size:26px; }
+    .card .icon.mono-j{ font-size:32px; }
+    .card .label{ font-size:11px; }
+    .deck{ gap:26px; padding: 30px calc(50% - 68px) 30px; }
+    .chip-title{ font-size:15px; }
   }
-
-  @media (min-width: 768px){
-    .book-card{ width:150px; }
-    .book-3d{ width:150px; height:204px; }
-    .carousel-track{ gap:44px; padding: 50px calc(50% - 75px) 70px; }
+  @media (min-width:768px){
+    .card{ width:150px; height:200px; }
+    .deck{ gap:30px; padding: 30px calc(50% - 75px) 30px; }
   }
 
   @media (prefers-reduced-motion: reduce){
     *{ transition:none !important; animation:none !important; }
-    .book-card{ opacity:1; animation:none; }
-    .bg-wrap .bg-img{ animation:none; }
-    .topo-layer .t1, .topo-layer .t2, .topo-layer .t3{ animation:none; }
-    .pulse-dot{ animation:none; opacity:0.5; }
+    .card{ opacity:1; }
+    .chip{ opacity:1; }
   }
 </style>
 <base target="_blank">
 </head>
 <body>
 
-<div class="bg-wrap">
-  <div class="bg-img"></div>
-  <div class="bg-overlay"></div>
-
-  <div class="topo-layer">
-    <svg class="t1" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-      <path d="M-50,150 Q200,80 400,180 T800,120 T1250,200" stroke="rgba(80,90,160,0.3)" stroke-width="1.2" fill="none"/>
-      <path d="M-50,220 Q250,140 500,240 T900,160 T1250,280" stroke="rgba(80,90,160,0.25)" stroke-width="1" fill="none"/>
-      <path d="M-50,300 Q300,200 550,310 T950,220 T1250,360" stroke="rgba(80,90,160,0.2)" stroke-width="0.9" fill="none"/>
-      <path d="M-50,400 Q350,280 600,410 T1000,300 T1250,460" stroke="rgba(80,90,160,0.16)" stroke-width="0.8" fill="none"/>
-      <path d="M-50,520 Q400,380 650,520 T1050,400 T1250,580" stroke="rgba(80,90,160,0.12)" stroke-width="0.7" fill="none"/>
-      <path d="M150,-50 Q120,200 180,400 T140,850" stroke="rgba(80,90,160,0.18)" stroke-width="0.9" fill="none"/>
-      <path d="M350,-50 Q320,200 380,400 T340,850" stroke="rgba(80,90,160,0.15)" stroke-width="0.8" fill="none"/>
-      <path d="M550,-50 Q520,200 580,400 T540,850" stroke="rgba(80,90,160,0.12)" stroke-width="0.7" fill="none"/>
-      <path d="M750,-50 Q720,200 780,400 T740,850" stroke="rgba(80,90,160,0.1)" stroke-width="0.6" fill="none"/>
-      <rect x="280" y="180" width="60" height="60" rx="2" stroke="rgba(90,100,170,0.2)" stroke-width="0.8" fill="none"/>
-      <rect x="620" y="280" width="80" height="80" rx="2" stroke="rgba(90,100,170,0.18)" stroke-width="0.8" fill="none"/>
-      <rect x="850" y="150" width="50" height="50" rx="2" stroke="rgba(90,100,170,0.16)" stroke-width="0.7" fill="none"/>
-      <rect x="420" y="450" width="70" height="70" rx="2" stroke="rgba(90,100,170,0.15)" stroke-width="0.7" fill="none"/>
-      <line x1="0" y1="350" x2="1200" y2="350" stroke="rgba(100,110,180,0.1)" stroke-width="0.6" stroke-dasharray="8,6"/>
-      <line x1="0" y1="550" x2="1200" y2="550" stroke="rgba(100,110,180,0.08)" stroke-width="0.6" stroke-dasharray="8,6"/>
-      <line x1="480" y1="0" x2="480" y2="800" stroke="rgba(100,110,180,0.08)" stroke-width="0.6" stroke-dasharray="8,6"/>
-    </svg>
-
-    <svg class="t2" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-      <path d="M-50,100 Q300,20 600,120 T1100,60 T1250,160" stroke="rgba(100,110,180,0.22)" stroke-width="1" fill="none"/>
-      <path d="M-50,180 Q350,100 650,190 T1150,130 T1250,240" stroke="rgba(100,110,180,0.18)" stroke-width="0.9" fill="none"/>
-      <path d="M-50,260 Q400,170 700,270 T1200,200 T1250,320" stroke="rgba(100,110,180,0.14)" stroke-width="0.8" fill="none"/>
-      <path d="M-50,360 Q450,260 750,370 T1250,280 T1250,420" stroke="rgba(100,110,180,0.11)" stroke-width="0.7" fill="none"/>
-      <path d="M220,-50 Q190,200 250,400 T210,850" stroke="rgba(100,110,180,0.12)" stroke-width="0.8" fill="none"/>
-      <path d="M480,-50 Q450,200 510,400 T470,850" stroke="rgba(100,110,180,0.1)" stroke-width="0.7" fill="none"/>
-      <rect x="150" y="220" width="45" height="45" rx="1" stroke="rgba(100,110,180,0.14)" stroke-width="0.6" fill="none"/>
-      <rect x="520" y="380" width="55" height="55" rx="1" stroke="rgba(100,110,180,0.12)" stroke-width="0.6" fill="none"/>
-      <rect x="720" y="200" width="40" height="40" rx="1" stroke="rgba(100,110,180,0.1)" stroke-width="0.5" fill="none"/>
-    </svg>
-
-    <svg class="t3" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-      <path d="M-50,130 Q400,50 700,140 T1200,80 T1250,190" stroke="rgba(120,130,190,0.18)" stroke-width="0.9" fill="none"/>
-      <path d="M-50,210 Q450,130 750,220 T1250,150 T1250,270" stroke="rgba(120,130,190,0.14)" stroke-width="0.8" fill="none"/>
-      <path d="M-50,290 Q500,210 800,300 T1250,230 T1250,350" stroke="rgba(120,130,190,0.11)" stroke-width="0.7" fill="none"/>
-      <path d="M300,-50 Q270,200 330,400 T290,850" stroke="rgba(120,130,190,0.1)" stroke-width="0.7" fill="none"/>
-      <path d="M650,-50 Q620,200 680,400 T640,850" stroke="rgba(120,130,190,0.08)" stroke-width="0.6" fill="none"/>
-      <rect x="380" y="260" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.1)" stroke-width="0.5" fill="none"/>
-      <rect x="580" y="160" width="30" height="30" rx="1" stroke="rgba(120,130,190,0.08)" stroke-width="0.5" fill="none"/>
-      <rect x="820" y="340" width="35" height="35" rx="1" stroke="rgba(120,130,190,0.09)" stroke-width="0.5" fill="none"/>
-    </svg>
-
-    <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;">
-      <circle cx="310" cy="210" r="2" fill="#d4a843" class="pulse-dot"/>
-      <circle cx="660" cy="320" r="2" fill="#d4a843" class="pulse-dot d2"/>
-      <circle cx="875" cy="175" r="2" fill="#d4a843" class="pulse-dot d3"/>
-      <circle cx="455" cy="485" r="2" fill="#d4a843" class="pulse-dot"/>
-      <circle cx="210" cy="547" r="2" fill="#d4a843" class="pulse-dot d2"/>
-      <circle cx="785" cy="512" r="2" fill="#d4a843" class="pulse-dot d3"/>
-      <circle cx="170" cy="242" r="2" fill="#d4a843" class="pulse-dot"/>
-      <circle cx="545" cy="407" r="2" fill="#d4a843" class="pulse-dot d2"/>
-      <circle cx="740" cy="220" r="2" fill="#d4a843" class="pulse-dot d3"/>
-      <circle cx="345" cy="545" r="2" fill="#d4a843" class="pulse-dot"/>
-      <circle cx="1000" cy="442" r="2" fill="#d4a843" class="pulse-dot d2"/>
-      <circle cx="400" cy="278" r="2" fill="#d4a843" class="pulse-dot d3"/>
-      <circle cx="595" cy="175" r="2" fill="#d4a843" class="pulse-dot"/>
-      <circle cx="840" cy="357" r="2" fill="#d4a843" class="pulse-dot d2"/>
-      <circle cx="265" cy="435" r="2" fill="#d4a843" class="pulse-dot d3"/>
-      <circle cx="350" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-      <circle cx="700" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
-      <circle cx="900" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
-      <circle cx="500" cy="470" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-      <circle cx="200" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
-      <circle cx="800" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
-      <circle cx="600" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-      <circle cx="400" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
-      <circle cx="1100" cy="300" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
-      <circle cx="300" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-      <circle cx="1000" cy="500" r="1.5" fill="#5a8fd4" class="pulse-dot d3"/>
-      <circle cx="500" cy="200" r="1.5" fill="#5a8fd4" class="pulse-dot"/>
-      <circle cx="750" cy="400" r="1.5" fill="#5a8fd4" class="pulse-dot d2"/>
-    </svg>
-  </div>
-
-  <div class="bg-vignette"></div>
+<div class="grid-bg">
+  <div class="glow"></div>
+  <div class="dots"></div>
+  <div class="vignette"></div>
 </div>
 
 <div class="page">
   <header>
-<h1>Maks Gorin</h1>
-    <p>Montréal</p>
+    <p class="eyebrow">Montréal — Index</p>
+    <h1>Maks Gorin</h1>
+    <p class="hint">Swipe to browse · tap to open</p>
   </header>
-  <p class="hint">Swipe to browse · tap a book</p>
 
-  <div class="carousel-wrap" id="carousel">
-    <div class="carousel-track" id="track">
+  <div class="chip" id="chip">
+    <div class="chip-text">
+      <span class="chip-eyebrow" id="chipEyebrow">Website</span>
+      <span class="chip-title" id="chipTitle">januslabsco.com</span>
+    </div>
+    <i class="fa-solid fa-arrow-right"></i>
+  </div>
 
-      <a class="book-card" data-type="link" href="https://januslabsco.com" data-web="https://januslabsco.com">
-        <div class="book-3d">
-          <div class="book-spine janus">
-            <div class="spine-shine"></div>
-            <img src="assets/janus-logo-icon.png" alt="Janus" class="spine-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-            <i class="fa-solid fa-briefcase spine-icon" style="display:none"></i>
-            <span class="spine-title">Studio</span>
-          </div>
-          <div class="book-pages-right"></div>
-          <div class="book-pages-top"></div>
-          <div class="book-shadow"></div>
-        </div>
-        <div class="label"><span class="t">Janus Labs</span><span class="s">januslabsco.com</span></div>
+  <div class="deck-wrap" id="carousel">
+    <div class="deck" id="track">
+
+      <a class="card" data-type="link" href="https://januslabsco.com" data-web="https://januslabsco.com" aria-label="Open Janus Labs website">
+        <span class="idx">01</span>
+        <span class="icon mono-j">J</span>
+        <span class="label">Studio</span>
       </a>
 
-      <a class="book-card" data-type="link"
+      <a class="card" data-type="link"
          href="https://www.youtube.com/@maksgorin2687"
          data-web="https://www.youtube.com/@maksgorin2687"
          data-ios="youtube://www.youtube.com/@maksgorin2687"
-         data-android-package="com.google.android.youtube">
-        <div class="book-3d">
-          <div class="book-spine youtube">
-            <div class="spine-shine"></div>
-            <i class="fa-brands fa-youtube spine-icon"></i>
-            <span class="spine-title">YouTube</span>
-          </div>
-          <div class="book-pages-right"></div>
-          <div class="book-pages-top"></div>
-          <div class="book-shadow"></div>
-        </div>
-        <div class="label"><span class="t">@maksgorin2687</span><span class="s">Video content</span></div>
+         data-android-package="com.google.android.youtube"
+         aria-label="Open YouTube channel">
+        <span class="idx">02</span>
+        <span class="icon"><i class="fa-brands fa-youtube"></i></span>
+        <span class="label">YouTube</span>
       </a>
 
-      <a class="book-card" data-type="link"
+      <a class="card" data-type="link"
          href="https://www.tiktok.com/@maksgorin1"
          data-web="https://www.tiktok.com/@maksgorin1"
-         data-android-package="com.zhiliaoapp.musically">
-        <div class="book-3d">
-          <div class="book-spine tiktok">
-            <div class="spine-shine"></div>
-            <i class="fa-brands fa-tiktok spine-icon"></i>
-            <span class="spine-title">TikTok</span>
-          </div>
-          <div class="book-pages-right"></div>
-          <div class="book-pages-top"></div>
-          <div class="book-shadow"></div>
-        </div>
-        <div class="label"><span class="t">@maksgorin1</span><span class="s">Short form</span></div>
+         data-android-package="com.zhiliaoapp.musically"
+         aria-label="Open TikTok profile">
+        <span class="idx">03</span>
+        <span class="icon"><i class="fa-brands fa-tiktok"></i></span>
+        <span class="label">TikTok</span>
       </a>
 
-      <div class="book-card" data-type="quotes" id="quoteBook">
-        <div class="book-3d">
-          <div class="book-spine quotes">
-            <div class="spine-shine"></div>
-            <i class="fa-solid fa-feather spine-icon"></i>
-            <span class="spine-title">Quotes</span>
-          </div>
-          <div class="book-pages-right"></div>
-          <div class="book-pages-top"></div>
-          <div class="book-shadow"></div>
-        </div>
-        <div class="label"><span class="t">Wisdom</span><span class="s">Tap to read</span></div>
+      <div class="card" data-type="quotes" id="quoteCard" role="button" tabindex="0" aria-label="Open a quote">
+        <span class="idx">04</span>
+        <span class="icon"><i class="fa-solid fa-feather"></i></span>
+        <span class="label">Quotes</span>
       </div>
 
     </div>
@@ -573,59 +256,83 @@
 </div>
 
 <div class="backdrop" id="backdrop"></div>
-<div class="open-book" id="openBook">
-  <div class="book-close" id="bookClose"><i class="fa-solid fa-xmark"></i></div>
-  <div class="page-inner" id="pageInner">
-    <i class="fa-solid fa-quote-left quill"></i>
-    <div class="quote-text" id="quoteText"></div>
-    <div class="quote-by" id="quoteBy"></div>
-    <div class="quote-tap"><i class="fa-solid fa-hand-pointer"></i> Tap to turn the page</div>
-  </div>
+<div class="modal" id="modal">
+  <div class="modal-close" id="modalClose" role="button" tabindex="0" aria-label="Close"><i class="fa-solid fa-xmark"></i></div>
+  <p class="modal-eyebrow">Quote — tap to cycle</p>
+  <p class="modal-quote" id="quoteText"></p>
+  <p class="modal-by" id="quoteBy"></p>
+  <p class="modal-tap">Tap anywhere to read another</p>
 </div>
 
 <script>
 (function(){
   var carousel = document.getElementById('carousel');
-  var cards = Array.prototype.slice.call(document.querySelectorAll('.book-card'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var chip = document.getElementById('chip');
+  var chipEyebrow = document.getElementById('chipEyebrow');
+  var chipTitle = document.getElementById('chipTitle');
   var ticking = false;
+  var lastActive = -1;
 
-  function updateCoverflow(){
+  var chipData = [
+    { eyebrow:'Website', title:'januslabsco.com' },
+    { eyebrow:'Video', title:'@maksgorin2687' },
+    { eyebrow:'Short form', title:'@maksgorin1' },
+    { eyebrow:'Wisdom', title:'Tap to read' }
+  ];
+
+  function updateChip(idx){
+    if (idx === lastActive) return;
+    lastActive = idx;
+    var d = chipData[idx];
+    if (!d) return;
+    chipEyebrow.style.opacity = 0; chipTitle.style.opacity = 0;
+    setTimeout(function(){
+      chipEyebrow.textContent = d.eyebrow;
+      chipTitle.textContent = d.title;
+      chipEyebrow.style.opacity = 1; chipTitle.style.opacity = 1;
+    }, 130);
+  }
+
+  function updateDeck(){
     var rect = carousel.getBoundingClientRect();
     var centerX = rect.left + rect.width/2;
-    cards.forEach(function(card){
+    var nearestIdx = 0, nearestAbs = Infinity;
+
+    cards.forEach(function(card, i){
       var cRect = card.getBoundingClientRect();
       var cCenter = cRect.left + cRect.width/2;
       var delta = (cCenter - centerX) / (rect.width/2);
-      var clamped = Math.max(-1.3, Math.min(1.3, delta));
-      var rotateY = -clamped*32;
-      var rotateX = 8 - Math.abs(clamped)*3;
+      var clamped = Math.max(-1.4, Math.min(1.4, delta));
+      var rotate = clamped * 13;
+      var arc = Math.abs(clamped) * 28;
       var scale = 1 - Math.min(Math.abs(clamped),1)*0.22;
-      var bright = 1 - Math.min(Math.abs(clamped),1)*0.45;
-      var z = (1 - Math.abs(clamped)) * 50;
-      card.style.transform = 'rotateY('+rotateY+'deg) rotateX('+rotateX+'deg) scale('+scale+') translateZ('+z+'px)';
+      var bright = 1 - Math.min(Math.abs(clamped),1)*0.15;
+
+      card.style.transform = 'rotate('+rotate+'deg) translateY('+arc+'px) scale('+scale+')';
       card.style.zIndex = Math.round((1-Math.abs(clamped))*100);
-      card.querySelector('.book-spine').style.filter = 'brightness('+bright+')';
-      card.querySelector('.label').style.opacity = 1 - Math.min(Math.abs(clamped),1)*0.7;
-      if (Math.abs(clamped) < 0.15) {
-        card.classList.add('active');
-      } else {
-        card.classList.remove('active');
-      }
+      card.style.filter = 'brightness('+bright+')';
+
+      if (Math.abs(delta) < nearestAbs){ nearestAbs = Math.abs(delta); nearestIdx = i; }
     });
+
+    cards.forEach(function(card, i){ card.classList.toggle('active', i === nearestIdx); });
+    updateChip(nearestIdx);
     ticking = false;
   }
+
   function onScroll(){
-    if (!ticking){ requestAnimationFrame(updateCoverflow); ticking = true; }
+    if (!ticking){ requestAnimationFrame(updateDeck); ticking = true; }
   }
   carousel.addEventListener('scroll', onScroll, { passive:true });
-  window.addEventListener('resize', updateCoverflow);
-  updateCoverflow();
+  window.addEventListener('resize', updateDeck);
+  updateDeck();
 
   // app-first redirect
   var isAndroid = /android/i.test(navigator.userAgent);
   var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
-  cards.filter(function(c){ return c.dataset.type==='link'; }).forEach(function(row){
+  cards.filter(function(c){ return c.dataset.type === 'link'; }).forEach(function(row){
     row.addEventListener('click', function(e){
       var webUrl = row.getAttribute('data-web');
       var iosScheme = row.getAttribute('data-ios');
@@ -638,8 +345,8 @@
         return;
       }
       if (isIOS && iosScheme){
-        var didHide=false;
-        var onHide=function(){ didHide=true; };
+        var didHide = false;
+        var onHide = function(){ didHide = true; };
         document.addEventListener('visibilitychange', onHide, { once:true });
         window.location.href = iosScheme;
         setTimeout(function(){
@@ -678,125 +385,64 @@
     { q:"The lamp that guides a sailor home burns brightest in the dark.", by:"an old ship captain's log" },
     { q:"A garden grown in silence still feeds the whole village.", by:"anonymous, attrib. folk proverb" }
   ];
-  var lastIndex = -1;
+  var lastQuoteIdx = -1;
   function pickQuote(){
-    var idx; do { idx = Math.floor(Math.random()*quotes.length); } while (idx===lastIndex && quotes.length>1);
-    lastIndex = idx; return quotes[idx];
+    var idx; do { idx = Math.floor(Math.random()*quotes.length); } while (idx === lastQuoteIdx && quotes.length > 1);
+    lastQuoteIdx = idx; return quotes[idx];
   }
 
-  var quoteBook = document.getElementById('quoteBook');
+  var quoteCard = document.getElementById('quoteCard');
   var backdrop = document.getElementById('backdrop');
-  var openBook = document.getElementById('openBook');
-  var pageInner = document.getElementById('pageInner');
+  var modal = document.getElementById('modal');
+  var modalClose = document.getElementById('modalClose');
   var quoteText = document.getElementById('quoteText');
   var quoteBy = document.getElementById('quoteBy');
-  var bookClose = document.getElementById('bookClose');
   var isOpen = false;
 
-  function setQuoteContent(){
+  function setQuote(fade){
     var q = pickQuote();
-    quoteText.textContent = '"' + q.q + '"';
-    quoteBy.textContent = q.by;
+    if (fade){
+      quoteText.style.opacity = 0; quoteBy.style.opacity = 0;
+      setTimeout(function(){
+        quoteText.textContent = '"' + q.q + '"';
+        quoteBy.textContent = q.by;
+        quoteText.style.opacity = 1; quoteBy.style.opacity = 1;
+      }, 140);
+    } else {
+      quoteText.textContent = '"' + q.q + '"';
+      quoteBy.textContent = q.by;
+    }
   }
 
-  function openTheBook(){
-    var startRect = quoteBook.querySelector('.book-3d').getBoundingClientRect();
-    var vw = window.innerWidth, vh = window.innerHeight;
-    var targetW = Math.min(340, vw*0.88);
-    var targetH = Math.min(460, vh*0.72);
-    var targetLeft = (vw - targetW)/2;
-    var targetTop = (vh - targetH)/2;
-
-    openBook.style.left = targetLeft+'px';
-    openBook.style.top = targetTop+'px';
-    openBook.style.width = targetW+'px';
-    openBook.style.height = targetH+'px';
-    openBook.classList.add('visible');
-    openBook.classList.remove('opened');
-
-    var dx = (startRect.left + startRect.width/2) - (targetLeft + targetW/2);
-    var dy = (startRect.top + startRect.height/2) - (targetTop + targetH/2);
-    var sx = startRect.width / targetW;
-    var sy = startRect.height / targetH;
-
-    openBook.style.transform = 'translate('+dx+'px,'+dy+'px) scale('+sx+','+sy+')';
-    openBook.offsetHeight;
-
+  function openModal(){
+    setQuote(false);
     backdrop.classList.add('show');
-    requestAnimationFrame(function(){
-      openBook.classList.add('animating');
-      openBook.style.transform = 'none';
-    });
-
-    setQuoteContent();
-
-    var settled = false;
-    function markOpened(){
-      if (settled) return;
-      settled = true;
-      openBook.removeEventListener('transitionend', onEnd);
-      openBook.classList.add('opened');
-      isOpen = true;
-    }
-    var onEnd = function(e){
-      if (e.target !== openBook || e.propertyName !== 'transform') return;
-      markOpened();
-    };
-    openBook.addEventListener('transitionend', onEnd);
-    setTimeout(markOpened, 650);
+    modal.classList.add('show');
+    isOpen = true;
+    modalClose.focus();
   }
-
-  function closeTheBook(){
-    var startRect = quoteBook.querySelector('.book-3d').getBoundingClientRect();
-    var currentRect = openBook.getBoundingClientRect();
-    var dx = (startRect.left + startRect.width/2) - (currentRect.left + currentRect.width/2);
-    var dy = (startRect.top + startRect.height/2) - (currentRect.top + currentRect.height/2);
-    var sx = startRect.width / currentRect.width;
-    var sy = startRect.height / currentRect.height;
-
-    openBook.classList.remove('opened');
+  function closeModal(){
     backdrop.classList.remove('show');
-    openBook.style.transform = 'translate('+dx+'px,'+dy+'px) scale('+sx+','+sy+')';
-
-    var settled = false;
-    function markClosed(){
-      if (settled) return;
-      settled = true;
-      openBook.removeEventListener('transitionend', onEnd);
-      openBook.classList.remove('visible', 'animating');
-      openBook.style.transform = 'none';
-      isOpen = false;
-    }
-    var onEnd = function(e){
-      if (e.target !== openBook || e.propertyName !== 'transform') return;
-      markClosed();
-    };
-    openBook.addEventListener('transitionend', onEnd);
-    setTimeout(markClosed, 650);
+    modal.classList.remove('show');
+    isOpen = false;
+    quoteCard.focus();
   }
 
-  function turnPage(){
-    pageInner.classList.add('turning');
-    setTimeout(function(){
-      setQuoteContent();
-      pageInner.classList.remove('turning');
-    }, 190);
-  }
-
-  quoteBook.addEventListener('click', function(e){
-    e.stopPropagation();
-    if (!isOpen){ openTheBook(); }
+  quoteCard.addEventListener('click', function(e){ e.stopPropagation(); if (!isOpen) openModal(); });
+  quoteCard.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); if (!isOpen) openModal(); }
   });
-  openBook.addEventListener('click', function(e){
-    if (e.target === bookClose || bookClose.contains(e.target)) return;
-    if (isOpen){ turnPage(); }
+  modal.addEventListener('click', function(e){
+    if (e.target === modalClose || modalClose.contains(e.target)) return;
+    setQuote(true);
   });
-  bookClose.addEventListener('click', function(e){
-    e.stopPropagation();
-    closeTheBook();
+  modalClose.addEventListener('click', function(e){ e.stopPropagation(); closeModal(); });
+  modalClose.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); closeModal(); }
   });
-  backdrop.addEventListener('click', function(){
-    if (isOpen){ closeTheBook(); }
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && isOpen) closeModal();
   });
 })();
 </script>
