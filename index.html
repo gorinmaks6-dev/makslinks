@@ -15,8 +15,8 @@
     --paper-dim: rgba(236,233,226,0.78);
     --muted: rgba(236,233,226,0.42);
     --line: rgba(236,233,226,0.10);
-    --signal:#37e28a;
-    --signal-ink:#06140d;
+    --signal:#c9cdd4;
+    --signal-ink:#14161b;
     --serif:'Fraunces',serif;
     --mono:'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
   }
@@ -35,12 +35,21 @@
   .grid-bg{ position:fixed; inset:0; z-index:0; background:var(--ink); }
   .grid-bg .glow{
     position:absolute; inset:0;
-    background: radial-gradient(circle at 50% 62%, rgba(55,226,138,0.14), transparent 55%);
+    background: radial-gradient(circle at 50% 62%, rgba(200,205,215,0.14), transparent 55%);
   }
   .grid-bg .dots{
     position:absolute; inset:0;
     background-image: radial-gradient(rgba(236,233,226,0.07) 1px, transparent 1px);
     background-size: 25px 25px;
+  }
+  .grid-bg .glow{ animation: glowPulse 11s ease-in-out infinite alternate; }
+  @keyframes glowPulse{
+    from{ opacity:0.75; transform:scale(1); }
+    to{ opacity:1; transform:scale(1.06); }
+  }
+  .grid-bg .dust{
+    position:absolute; inset:0; width:100%; height:100%;
+    opacity:0.85;
   }
   .grid-bg .vignette{
     position:absolute; inset:0;
@@ -121,7 +130,7 @@
     background:var(--card-bg);
     transition:background 0.35s ease;
   }
-  .card.active{ --card-bg: var(--signal); box-shadow:0 20px 44px rgba(55,226,138,0.32), 0 0 0 1px rgba(55,226,138,0.4); }
+  .card.active{ --card-bg: var(--signal); box-shadow:0 20px 44px rgba(201,205,212,0.28), 0 0 0 1px rgba(201,205,212,0.4); }
 
   .card .idx{ font-size:9.5px; letter-spacing:0.05em; color:rgba(0,0,0,0.34); }
   .card.active .idx{ color:rgba(6,20,13,0.5); }
@@ -191,12 +200,14 @@
   }
 </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
 <div class="grid-bg">
   <div class="glow"></div>
   <div class="dots"></div>
+  <canvas class="dust" id="dust" aria-hidden="true"></canvas>
   <div class="vignette"></div>
 </div>
 
@@ -447,5 +458,92 @@
 })();
 </script>
 
+<script>
+(function(){
+  var canvas = document.getElementById('dust');
+  if (!canvas) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ctx = canvas.getContext('2d');
+  var W = 0, H = 0, dpr = 1;
+  var particles = [];
+  var px = 0, py = 0;          // pointer parallax target
+  var sx = 0, sy = 0;          // smoothed parallax
+  var scrollDrift = 0;
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function makeParticle(seed){
+    var r = Math.random();
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: r < 0.85 ? 0.6 + Math.random() * 1.1 : 1.6 + Math.random() * 1.4, // mostly fine dust, a few larger motes
+      vx: (Math.random() - 0.5) * 0.07,
+      vy: -(0.015 + Math.random() * 0.05),                                 // slow upward drift
+      a: 0.15 + Math.random() * 0.4,
+      tw: 0.4 + Math.random() * 1.2,   // twinkle speed
+      ph: Math.random() * Math.PI * 2, // twinkle phase
+      depth: 0.3 + Math.random() * 0.7 // parallax depth
+    };
+  }
+
+  var COUNT = Math.min(90, Math.max(45, Math.round(window.innerWidth / 14)));
+  for (var i = 0; i < COUNT; i++) particles.push(makeParticle());
+
+  var carousel = document.getElementById('carousel');
+  if (carousel){
+    carousel.addEventListener('scroll', function(){
+      scrollDrift = carousel.scrollLeft * 0.015;
+    }, { passive:true });
+  }
+  window.addEventListener('pointermove', function(e){
+    px = (e.clientX / W - 0.5) * 2;
+    py = (e.clientY / H - 0.5) * 2;
+  }, { passive:true });
+
+  var t = 0;
+  function frame(){
+    t += 0.016;
+    sx += (px - sx) * 0.03;
+    sy += (py - sy) * 0.03;
+    ctx.clearRect(0, 0, W, H);
+
+    for (var i = 0; i < particles.length; i++){
+      var p = particles[i];
+      if (!reduceMotion){
+        p.x += p.vx + sx * 0.12 * p.depth;
+        p.y += p.vy + sy * 0.08 * p.depth;
+        if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; }
+        if (p.x < -4) p.x = W + 4;
+        if (p.x > W + 4) p.x = -4;
+      }
+      var twinkle = 0.55 + 0.45 * Math.sin(t * p.tw + p.ph);
+      var alpha = p.a * twinkle;
+      var ox = scrollDrift * p.depth * 0.4;
+
+      ctx.beginPath();
+      ctx.arc(p.x + ox, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(226,229,234,' + alpha.toFixed(3) + ')';
+      ctx.fill();
+
+      if (p.r > 1.6){ // soft halo on the larger motes
+        ctx.beginPath();
+        ctx.arc(p.x + ox, p.y, p.r * 3.2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(201,205,212,' + (alpha * 0.05).toFixed(3) + ')';
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
 </body>
 </html>
